@@ -1,0 +1,22 @@
+.graph {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.buttons-list {
+    display: none;
+}
+
+.buttons-list.show {
+    top: 1%;
+    right: 1%;
+    gap: 10px;
+    z-index: 10;
+    display: flex;
+    justify-content: flex-end;
+    position: absolute;
+}
+
+
+

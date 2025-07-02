@@ -1,0 +1,59 @@
+.sidebar {
+    top: 0;
+    z-index: 10;
+    left: -300px;
+    height: 100%;
+    position: fixed;
+    width: fit-content;
+    background-color:#F3F3F4;
+    transition: left 0.8s ease-in-out;
+}
+
+.sidebar.show {
+    left: 0;
+}
+
+.icon {
+    width: 15%;
+    cursor: pointer;
+}
+
+.icon path {
+    transition: stroke 0.3s ease-in-out;
+}
+
+.icon:hover path{
+    stroke: #B0B0B0;
+}
+
+.menu-icon {
+    top: 0;
+    left: 0;
+    width: 2.5%;
+    z-index: 20;
+    position: fixed;
+}
+
+.sidebar-list {
+    padding: 5%;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-item {
+    padding: 3%;
+    border-radius: 5px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.sidebar-item:hover {
+    background-color: #7E7F83;
+    a {
+        color: white;
+    }
+}
+
+.sidebar-item a {
+    color: black;
+}
