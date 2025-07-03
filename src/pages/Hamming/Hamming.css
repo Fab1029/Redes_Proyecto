@@ -1,0 +1,37 @@
+.hamming-page {
+  gap: 2rem;
+  display: flex;
+  padding: 2rem;
+  justify-content: center;
+}
+
+.left-side-container,
+.right-side-container {
+  width: fit-content;
+  background-color: white;
+}
+
+.left-side-container {
+  gap: 1.5rem;
+  display: flex;
+  margin-top: 1rem;
+  flex-direction: column;
+}
+
+.right-side-container {
+  gap: 1.5rem;
+  display: flex;
+  padding: 2rem;
+  border-radius: 10px;
+  align-items: center;
+  height: fit-content;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.buttons-container {
+  gap: 1rem; 
+  display: flex;
+  justify-content: center; 
+}
+

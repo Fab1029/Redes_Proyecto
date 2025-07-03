@@ -66,27 +66,12 @@ export class Hamming {
         }
 
     
-        // Calcular los bits de paridad
+        // Calcular los bits de paridad (paridad par, solo contando los 1s)
         parity_matrix.forEach((row, rowIndex) => {
-            let zero_parity = 0;
-            let ones_parity = 0;
+            const parity_bit_position = Math.pow(2, rowIndex) - 1;
+            const ones_count = row.filter(bit => bit === '1').length;
 
-            row.forEach((bit) => {
-                if (bit === '0') {
-                    zero_parity++;
-                } else if (bit === '1') {
-                    ones_parity++;
-                }
-
-            });
-
-            if (zero_parity !== 0 && zero_parity % 2 !== 0) {
-                row[Math.pow(2, rowIndex) - 1] = '0'; 
-            }
-            else if (ones_parity !== 0 && ones_parity % 2 !== 0) {
-                row[Math.pow(2, rowIndex) - 1] = '1';
-            }
-
+            row[parity_bit_position] = (ones_count % 2 === 0) ? '0' : '1';
         });
 
         return parity_matrix;
@@ -97,7 +82,7 @@ export class Hamming {
         @param:
             parityMatrix [[]]: Matriz de paridad construida a partir del frame
         @return:
-            list: Frame de Hamming construido a partir del frame y la matriz de paridad
+            String: Frame de Hamming construido a partir del frame y la matriz de paridad
     */
     buildHammingFrame(frame, parityMatrix) {
         const lengthFrame = frame.length;
@@ -123,7 +108,7 @@ export class Hamming {
             }
         }
 
-        return hamming_frame
+        return hamming_frame.join('');
 
     }
 

@@ -26,6 +26,10 @@ const SideBar = () => {
                             </li>
                             
                             <li className='sidebar-item'>
+                                <a href="/hamming">Hamming</a>
+                            </li>
+
+                            <li className='sidebar-item'>
                                 <a href="/crc">Cyclic Redundancy Check</a>
                             </li>
 

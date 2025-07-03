@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from './pages/Home/Home';
+import Hamming from './pages/Hamming/Hamming';
 import CyclicRedundancyCheck from './pages/CyclicRedundancyCheck/CyclicRedundancyCheck';
 
 const App = () => {
@@ -8,6 +9,7 @@ const App = () => {
     <Router>
       <Routes>
         <Route path='/' element={<Home />}/>
+        <Route path='/hamming' element={<Hamming/>}/>
         <Route path='/crc' element={<CyclicRedundancyCheck />} />
       </Routes>
     </Router>

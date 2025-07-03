@@ -7,9 +7,9 @@ export class CRC {
             frame list: Lista de bits del frame
             polynomial list: Lista de bits del polinomio generador
         @return:
-            frame_bits string: String del cociente de la division entre el frame y el polinomio
+            frame_bits string: String del residuo de la division entre el frame y el polinomio
     */
-    getQuotient(frame, polynomial) {
+    getResidue(frame, polynomial) {
         let frame_bits = [];
 
         for (let i = 0; i < frame.length; i++) {
@@ -50,7 +50,7 @@ export class CRC {
             frame_with_zeros.push('0'); 
         }
         
-        return frame.join('') + this.getQuotient(frame_with_zeros, polynomial);
+        return frame.join('') + this.getResidue(frame_with_zeros, polynomial);
     }
 
     /*
@@ -63,7 +63,7 @@ export class CRC {
         for (const[length, polynomial] of Object.entries(CRC_POLYNOMIALS)) {
             if (frame.length > length) {
                 const frame_transmited = this.buidFrameTransmission(frame.split(''), polynomial.split(''));
-                const quotient = this.getQuotient(frame_transmited.split(''), polynomial.split(''));
+                const quotient = this.getResidue(frame_transmited.split(''), polynomial.split(''));
 
                 if (parseInt(quotient.join(''), 10) === 0) {
                     return polynomial;

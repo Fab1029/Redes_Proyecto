@@ -10,7 +10,7 @@ const CyclicRedundancyCheck = () => {
   const bitInput = useRef();
   const messageInput = useRef();
   const generatorInput = useRef();
-  const [quotient, setQuotient] = useState(null);
+  const [residue, setResidue] = useState(null);
   const [frameSend, setFrameSend] = useState(null);
   const [frameTransmission, setFrameTransmission] = useState(null);
   
@@ -22,12 +22,12 @@ const CyclicRedundancyCheck = () => {
 
     const frame = crc.buidFrameTransmission(message, generator);
     const sent = modifyBit ? setRandomErrorBit(frame) : frame;
-    const quotientResult = crc.getQuotient(sent, generator);
+    const residueResult = crc.getResidue(sent, generator);
 
 
     setFrameTransmission(frame);
     setFrameSend(sent);
-    setQuotient(quotientResult);
+    setResidue(residueResult);
   };
 
   const handleClearData = () => {
@@ -37,7 +37,7 @@ const CyclicRedundancyCheck = () => {
 
     setFrameTransmission(null);
     setFrameSend(null);
-    setQuotient(null);
+    setResidue(null);
   };
 
 
@@ -95,7 +95,7 @@ const CyclicRedundancyCheck = () => {
 
       <div className='text-container'>
         <h1>Residuo</h1>
-        <p className='output-text'>{quotient}</p>
+        <p className='output-text'>{residue}</p>
       </div>
 
     </div>
