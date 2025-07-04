@@ -132,8 +132,8 @@ export class Dijkstra {
             }
             
         }
-
-        return new Set(path.reverse().map(node => node.label));
+        path = path.reverse().map(node => node.label);
+        return path.join(' \u2B95 ');
     }
 
     /*
@@ -205,8 +205,12 @@ export class Dijkstra {
             const min_node = definitive_node[1];
 
             // Definir nodo definitivo
-            dijkstra_matrix[row_index][j + 1] = min_node;
-            dijkstra_matrix[row_index][j + 1]['isDefinitive'] = true;
+            // Definir nodo definitivo
+            dijkstra_matrix[row_index][j + 1] = {
+                'weight': min_node.weight,
+                'node': min_node.node,
+                'isDefinitive': true
+            };
 
             // Marcar columnas restantes con null si es definitivo
             dijkstra_matrix = this.paddingDefinitiveRow(row_index, j + 2, dijkstra_matrix);

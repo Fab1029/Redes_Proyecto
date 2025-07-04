@@ -56,5 +56,12 @@ export class Node {
         return minEdge;
     }
 
+    toJSON() {
+        return {
+            from: this.label,
+            edges: this.edges.map((edge) => edge.toJSON())
+        };
+    }
+
 }
 

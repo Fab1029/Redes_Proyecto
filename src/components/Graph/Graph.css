@@ -9,13 +9,13 @@
 }
 
 .buttons-list.show {
-    top: 1%;
+    bottom: 1%;
     right: 1%;
     gap: 10px;
     z-index: 10;
     display: flex;
-    justify-content: flex-end;
     position: absolute;
+    justify-content: flex-end;
 }
 
 

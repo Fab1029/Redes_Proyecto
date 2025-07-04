@@ -3,4 +3,11 @@ export class Edge {
         this.node = node; 
         this.weight = weight; 
     }
+
+    toJSON() {
+        return {
+            to: this.node.label,
+            weight: this.weight
+        }
+    }
 }

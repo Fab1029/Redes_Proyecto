@@ -16,14 +16,11 @@
 .icon {
     width: 15%;
     cursor: pointer;
+    transition: transform 0.3s ease-in-out;
 }
 
-.icon path {
-    transition: stroke 0.3s ease-in-out;
-}
-
-.icon:hover path{
-    stroke: #B0B0B0;
+.icon:hover {
+    transform: scale(1.1);
 }
 
 .menu-icon {
@@ -44,10 +41,11 @@
 .sidebar-item {
     padding: 3%;
     border-radius: 5px;
-    transition: background-color 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
 
 .sidebar-item:hover {
+    transform: scale(1.02);
     background-color: #7E7F83;
     a {
         color: white;

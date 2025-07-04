@@ -1,0 +1,72 @@
+.dijkstra-page {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+}
+
+.left-graph-container {
+    width: 100%;
+    height: 100%;
+}
+
+.right-dijkstra-container {
+    padding: 1rem;
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.selecter-nodes-container {
+    gap: 1rem;
+    width: 100%;
+    display: flex;
+}
+
+.dijkstra-table-container {
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    margin: 1rem 0;
+    border-radius: 1rem;
+    align-items: center;
+    height: fit-content;
+    flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.text-container-route {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 1rem;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.custom-select {
+    width: 100%;
+    outline: none;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #333333;
+    max-width: 250px;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #cccccc;
+    background-color: #f0f0f0;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.custom-select:focus {
+    border-color: #002642;
+    box-shadow: 0 0 0 3px rgba(0, 38, 66, 0.2);
+}
+
+.custom-select option {
+    color: #333333;
+    background-color: white;
+}

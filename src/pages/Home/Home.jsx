@@ -7,15 +7,10 @@ import Button from '../../components/Button/Button'
 
 const Home = () => {
   
-  const buttons = [
-    <Button text={'🟢 Agregar nodo'} color={'#002642'} textColor={'white'}/>,
-    <Button text={'🗑️ Eliminar nodo'} color={'#DD1C1A'} textColor={'white'}/>
-  ];
-
   return (
-    <div className='home'>
+    <div className='home-page'>
       <SideBar />
-      <Graph buttons={buttons}/>
+      <Graph showButtons={true}/>
     </div>
   )
 }
