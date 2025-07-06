@@ -7,23 +7,27 @@ import SideBar from '../../components/SideBar/SideBar.jsx'
 
 const CyclicRedundancyCheck = () => {
   const crc = new CRC();
-  const bitInput = useRef();
-  const messageInput = useRef();
-  const generatorInput = useRef();
+  
+  const [message, setMessage] = useState('');
+  const [generator, setGenerator] = useState('');
+  const [modifyBit, setModifyBit] = useState(false);
+
   const [residue, setResidue] = useState(null);
   const [frameSend, setFrameSend] = useState(null);
   const [frameTransmission, setFrameTransmission] = useState(null);
   
   
   const handleCalculate = () => {
-    const message = messageInput.current.value.trim().split('');
-    const generator = generatorInput.current.value.trim().split('');
-    const modifyBit = bitInput.current.checked;
-
-    const frame = crc.buidFrameTransmission(message, generator);
+    const frame = crc.buidFrameTransmission(
+      message.trim().split(''),
+      generator.trim().split('')
+    );
+    
     const sent = modifyBit ? setRandomErrorBit(frame) : frame;
-    const residueResult = crc.getResidue(sent, generator);
-
+    const residueResult = crc.getResidue(
+      sent, 
+      generator.trim().split('')
+    );
 
     setFrameTransmission(frame);
     setFrameSend(sent);
@@ -31,15 +35,14 @@ const CyclicRedundancyCheck = () => {
   };
 
   const handleClearData = () => {
-    messageInput.current.value = '';
-    generatorInput.current.value = '';
-    bitInput.current.checked = false;    
+    setMessage('');
+    setGenerator('');
+    setModifyBit(false);    
 
     setFrameTransmission(null);
     setFrameSend(null);
     setResidue(null);
   };
-
 
   return (
     <div className='crc-page'>
@@ -49,7 +52,11 @@ const CyclicRedundancyCheck = () => {
         <input
           className='input message-input'
           placeholder='Ingresar mensaje en binario'
-          ref={messageInput}
+          value={message}
+          onChange={(e) => {
+            const val = e.target.value;
+            if (/^[01]*$/.test(val)) setMessage(val); 
+          }}
         />
       </div>
 
@@ -58,13 +65,21 @@ const CyclicRedundancyCheck = () => {
         <input
           className='input generator-input'
           placeholder='Ingresar generador en binario'
-          ref={generatorInput}
+          value={generator}
+          onChange={(e) => {
+            const val = e.target.value;
+            if (/^[01]*$/.test(val)) setGenerator(val); 
+          }}
         />
       </div>
 
       <div className='input-container'>
         <h1>Modificar bit</h1>
-        <input type='checkbox' ref={bitInput} />
+        <input 
+          type='checkbox' 
+          value={modifyBit} 
+          onChange={(e) => setModifyBit(e.target.checked)}
+        />
       </div>
 
       <div className='buttons-container'>

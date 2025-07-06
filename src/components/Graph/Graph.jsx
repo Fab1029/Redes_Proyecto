@@ -1,31 +1,30 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Graph.css'
 import { Node } from '../../model/node.js'
 import { Edge } from '../../model/edge.js'
-import { 
-  loadGraph, saveGraph, 
-  loadPloatNodes, savePlotNodes,
-  loadPlotEdges, savePlotEdges
-} from '../../data/data.js'
+import { saveGraph, savePlotNodes, savePlotEdges } from '../../data/data.js'
+
 
 import ReactFlow, {
     Controls,
-    Background,
-    useNodesState,
-    useEdgesState
+    Background
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
 import Button from '../Button/Button.jsx'
 
-let NODES = loadPloatNodes();
-let EDGES = loadPlotEdges();
 
-const Graph = ({ showButtons }) => {
-  const [graph, setGraph] = useState(loadGraph());
-  const [selectedNodeId, setSelectedNodeId] = useState(null);
-  const [nodes, setNodes, onNodesChange] = useNodesState(NODES);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(EDGES);
+const Graph = (
+  { useGraph,
+    useNodes,
+    useEdges,
+    showButtons 
+  }
+
+) => {
+  const [graph, setGraph] = useGraph;
+  const [nodes, setNodes, onNodesChange] = useNodes;;
+  const [edges, setEdges, onEdgesChange] = useEdges;
   
   const addNode = () => {
     const nodeLabel = prompt('Ingrese nombre del nodo:');
@@ -68,6 +67,7 @@ const Graph = ({ showButtons }) => {
     const startNode = graph.find(n => n.label === source);
     const endNode = graph.find(n => n.label === target);
 
+    // Si ya existe una conexion existente
     if (!startNode || !endNode || startNode.findNode(endNode)) return;
 
     startNode.addEdge(new Edge(endNode, weight));
@@ -78,6 +78,7 @@ const Graph = ({ showButtons }) => {
       source:source,
       target:target,
       animated: true,
+      type: 'straight',
       label: weight.toString()
     };
 
@@ -91,9 +92,23 @@ const Graph = ({ showButtons }) => {
     savePlotEdges(updatedEdges);
   };
 
-  const removeNode = () => {
-    if (!selectedNodeId) return;
+  const removeNode = () => {  
+    let nodeSelected = null;
+    // Obtener el nodo a eliminar
+    for (let nodeIter of nodes) {
+      
+      if (nodeIter.selected) {
 
+        nodeSelected = nodeIter;
+        break;
+      }
+
+    };
+    
+    if(nodeSelected === null) return;
+    
+    const selectedNodeId = nodeSelected.id;
+  
     const nodeToRemove = graph.find(n => n.label === selectedNodeId);
     if (!nodeToRemove) return;
 
@@ -105,17 +120,40 @@ const Graph = ({ showButtons }) => {
     const updatedGraph = graph.filter(n => n.label !== selectedNodeId);
     const updatedNodes = nodes.filter(n => n.id !== selectedNodeId);
     const updatedEdges = edges.filter(e => e.source !== selectedNodeId && e.target !== selectedNodeId);
-
+    
     setGraph(updatedGraph);
     setNodes(updatedNodes);
     setEdges(updatedEdges);
-    setSelectedNodeId(null);
 
     saveGraph(updatedGraph);
     savePlotNodes(updatedNodes);
     savePlotEdges(updatedEdges);
   };
 
+ 
+  const onNodeDragStop = (event, node) => {
+    // Actualiza la posición del nodo en el estado
+    const updatedNodes = nodes.map(n => {
+      if (n.id === node.id) {
+        return { ...n, position: node.position };
+      }
+      return n;
+    });
+
+    setNodes(updatedNodes);
+    savePlotNodes(updatedNodes);
+
+    // También puedes actualizar el grafo lógico si manejas posición ahí
+    const updatedGraph = graph.map(n => {
+      if (n.label === node.id) {
+        n.position = node.position;
+      }
+      return n;
+    });
+
+    setGraph(updatedGraph);
+    saveGraph(updatedGraph);
+  };
 
   return (
     <div className='graph'>
@@ -130,14 +168,7 @@ const Graph = ({ showButtons }) => {
         onConnect={addEdge}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
-        onNodeClick={(event, node) => {setSelectedNodeId(node.id)}}
-        onNodeDragStop={(event, node) => {
-                    const updatedNodes = nodes.map(n => 
-                      n.id === node.id ? { ...n, position: node.position } : n
-                    );
-                    setNodes(updatedNodes);
-                    savePlotNodes(updatedNodes);
-                  }}
+        onNodeDragStop={onNodeDragStop}
       >
         <Background />
         <Controls />

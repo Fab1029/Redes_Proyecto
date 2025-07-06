@@ -10,40 +10,36 @@ export class PRIM {
             tree list: Lista de nodos que forman el árbol de expansión mínima
     */    
     getTree(graph) {
+        // Tree estructura {from, to, weight}
         let tree = [];
         let visited_nodes = [];
-        let current_node = graph[0];
 
-        while(true) {
+        visited_nodes.push(graph[0]);
 
-            let minEdge = null;
-            for (let edge of current_node.edges) {
-                if (!visited_nodes.includes(edge.node)) { 
-                    if (minEdge == null) {
-                        minEdge = edge;
-                    }
-                    else if (edge.weight < minEdge.weight) {
-                        minEdge = edge;
+        while (visited_nodes.length < graph.length) {
+            
+            let nodeEnd = null;
+            let min_edge = {from: null, to: null, weight: Infinity};
+            
+            for (let node of visited_nodes) {
+
+                for (let edge of node.edges) {
+
+                    if (!visited_nodes.includes(edge.node)) {
+
+                        if (edge.weight < min_edge.weight) {
+                            nodeEnd = edge.node;
+                            min_edge.from = node.label;
+                            min_edge.to = edge.node.label;
+                            min_edge.weight = edge.weight;
+                        }
                     }
                 }
             }
-            
-            // Si estamos en el ultimo nodo y no hay más aristas, salimos del bucle
-            if (minEdge == null) break;
 
-            let node = new Node(current_node.label);
-            let nextNode = new Node(minEdge.node.label);
-
-            node.addEdge(new Edge(nextNode, minEdge.weight));
-            nextNode.addEdge(new Edge(node, minEdge.weight));
-
-            tree.push(node);
-            
-            visited_nodes.push(current_node);
-
-            current_node = minEdge.node;    
+            tree.push(min_edge);
+            visited_nodes.push(nodeEnd);
         }
-
         return tree;
     }
 }

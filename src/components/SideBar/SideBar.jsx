@@ -26,6 +26,10 @@ const SideBar = () => {
                             </li>
                             
                             <li className='sidebar-item'>
+                                <a href="/prim">Prim</a>
+                            </li>
+
+                            <li className='sidebar-item'>
                                 <a href="/dijkstra">Dijkstra</a>
                             </li>
                             

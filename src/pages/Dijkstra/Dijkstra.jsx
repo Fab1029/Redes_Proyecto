@@ -1,14 +1,22 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './Dijkstra.css'
-import { loadGraph } from '../../data/data.js'
+import { loadGraph, loadPloatNodes, loadPlotEdges} from '../../data/data.js'
 import { Dijkstra as DijkstraAlgorithm } from '../../algorithms/dijkstra.js'
 import SideBar from '../../components/SideBar/SideBar'
 import Graph from '../../components/Graph/Graph'
 import Button from '../../components/Button/Button'
 
+import {
+    useNodesState,
+    useEdgesState
+} from 'reactflow';
+
 
 const Dijkstra = () => {
-  const graph = loadGraph();  
+  const [graph, setGraph] = useState(loadGraph());
+  const [edges, setEdges, onEdgesChange] = useEdgesState(loadPlotEdges());
+  const [nodes, setNodes, onNodesChange] = useNodesState(loadPloatNodes());
+
   const selectorNodeEnd = useRef(); 
   const selectorNodeStart = useRef();  
   const [route, setRoute] = useState(null);
@@ -16,6 +24,14 @@ const Dijkstra = () => {
   const [dijkstraMatrix, setDijkstraMatrix] = useState(null);
   const [dijkstraTranslateMatrix, setDijkstraTranslateMatrix] = useState(null);
   
+  useEffect(() => {
+    
+    setDijkstraMatrix(null);
+    setDijkstraTranslateMatrix(null);
+    setRoute(null);
+
+  }, [graph]);
+
   const handleCalcuteButton = () => {
     const endNodeLabel = selectorNodeEnd.current.value;
     const startNodeLabel = selectorNodeStart.current.value;
@@ -24,7 +40,6 @@ const Dijkstra = () => {
     const startNode = graph.filter((node) => node.label === startNodeLabel)[0];
     
     const rawDijkstraMatrix = dijkstra.buildDijkstraMatrix(graph, startNode);
-    console.log(rawDijkstraMatrix);
     const translateDijkstraMatrix = dijkstra.translateDijkstraMatrix(rawDijkstraMatrix);
     const pathRoute = dijkstra.getPath(rawDijkstraMatrix, graph, startNode, endNode);
     
@@ -37,10 +52,7 @@ const Dijkstra = () => {
     <div className='dijkstra-page'>
         <SideBar/>
         <div className='left-graph-container'>
-            <Graph buttons={[
-                <Button text={'🟢 Agregar nodo'} color={'#002642'} textColor={'white'}/>,
-                <Button text={'🗑️ Eliminar nodo'} color={'#DD1C1A'} textColor={'white'}/>
-            ]}/>
+            <Graph useGraph={[graph, setGraph]} useNodes={[nodes, setNodes, onNodesChange]} useEdges={[edges, setEdges, onEdgesChange]} showButtons={true}/>
         </div>
         
         <div className='right-dijkstra-container'>
@@ -51,7 +63,7 @@ const Dijkstra = () => {
                     <select className='custom-select' ref={selectorNodeStart}>
                         {graph.map((node, index) => (
                             <option key={index} value={node.label}>{node.label}</option>  
-                        ))};
+                        ))}
 
                     </select>
                 </div>
