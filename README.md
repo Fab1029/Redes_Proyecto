@@ -1,12 +1,42 @@
-# React + Vite
+# 🧠 Proyecto de Simulación de Algoritmos de Redes
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este es un proyecto educativo e interactivo desarrollado con **React + Vite** y **JavaScript**, que simula el funcionamiento de varios algoritmos fundamentales en redes de computadoras. Utiliza **React Flow** para crear nodos visuales e interactivos y **React Router DOM** para navegar entre distintas páginas, cada una representando un algoritmo diferente.
 
-Currently, two official plugins are available:
+## 🚀 Tecnologías Utilizadas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- ⚛️ **React + Vite** — Desarrollo web rápido y moderno
+- 🔀 **React Router DOM** — Navegación entre páginas y vistas
+- 🔄 **React Flow** — Interfaz gráfica para representar grafos y nodos
+- 💡 **JavaScript** — Lógica de algoritmos e interacción
 
-## Expanding the ESLint configuration
+## 🧩 Algoritmos Implementados
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Este proyecto incluye la visualización y simulación de **6 algoritmos clásicos**:
+
+1. ✅ **CRC (Cyclic Redundancy Check)** — Detección de errores en transmisiones.
+2. 🧬 **Hamming Code** — Detección y corrección de errores.
+3. 📍 **Dijkstra** — Ruta más corta en un grafo ponderado.
+4. 🌐 **Estado de Enlace (Link-State)** — Algoritmo basado en la información global de la red.
+5. 🧭 **Vector de Distancia (Distance Vector)** — Algoritmo distribuido de enrutamiento.
+6. 🌲 **Prim** — Generación del árbol de expansión mínima en una red.
+
+## 🖱️ Funcionalidades
+
+- Representación visual de redes mediante nodos arrastrables e interconectables.
+- Interfaz interactiva para probar cada algoritmo con datos personalizados.
+- Navegación fluida entre algoritmos mediante rutas.
+- Modularidad para facilitar la ampliación con nuevos algoritmos o mejoras.
+
+## Como comenzar
+- Clonar proyecto
+```bash
+git clone https://github.com/Fab1029/Redes_Proyecto.git
+cd /proyecto
+```
+- Instalar librerias
+```bash
+npm install react-router-dom
+npm install react flow
+```
+
+
