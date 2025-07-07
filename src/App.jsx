@@ -5,6 +5,7 @@ import Hamming from './pages/Hamming/Hamming';
 import CyclicRedundancyCheck from './pages/CyclicRedundancyCheck/CyclicRedundancyCheck';
 import Dijkstra from './pages/Dijkstra/Dijkstra';
 import Prim from './pages/Prim/Prim';
+import LinkState from './pages/LinkState/LinkState';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path='/hamming' element={<Hamming />}/>
         <Route path='/dijkstra' element={<Dijkstra />}/>
         <Route path='/crc' element={<CyclicRedundancyCheck />}/>
+        <Route path='/link-state' element= {<LinkState />} />
       </Routes>
     </Router>
   )

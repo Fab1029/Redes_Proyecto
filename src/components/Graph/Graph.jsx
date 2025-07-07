@@ -37,7 +37,7 @@ const Graph = (
 
     const newPlotNode = {
       id: nodeLabel,
-      position: { x: Math.random() * 500 + 100, y: Math.random() * 500 + 100 },
+      position: { x: Math.random() * 500, y: Math.random() * 500 },
       data: { label: nodeLabel },
       style: {
         width: '5rem',
@@ -155,11 +155,99 @@ const Graph = (
     saveGraph(updatedGraph);
   };
 
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const text = e.target.result;
+      const lines = text.split(/\r?\n/).filter(line => line.trim() !== '');
+      
+      const nodeMap = new Map();
+      const newEdges = [];
+      const newGraph = [];
+
+      // Crear nodos y aristas
+      lines.forEach(line => {
+        const [fromLabel, toLabel, weightStr] = line.split(',');
+        const weight = parseInt(weightStr);
+
+        if (!nodeMap.has(fromLabel)) {
+          const fromNode = new Node(fromLabel);
+          nodeMap.set(fromLabel, fromNode);
+          newGraph.push(fromNode);
+        }
+
+        if (!nodeMap.has(toLabel)) {
+          const toNode = new Node(toLabel);
+          nodeMap.set(toLabel, toNode);
+          newGraph.push(toNode);
+        }
+
+        const fromNode = nodeMap.get(fromLabel);
+        const toNode = nodeMap.get(toLabel);
+
+        if (!fromNode.findNode(toNode)) {
+          fromNode.addEdge(new Edge(toNode, weight));
+          toNode.addEdge(new Edge(fromNode, weight));
+
+          newEdges.push({
+            id: `${fromLabel}-${toLabel}`,
+            source: fromLabel,
+            target: toLabel,
+            animated: true,
+            type: 'straight',
+            label: weight.toString()
+          });
+        }
+      });
+
+      const newNodes = Array.from(nodeMap.values()).map(node => ({
+        id: node.label,
+        position: { x: Math.random() * 500, y: Math.random() * 500 },
+        data: { label: node.label },
+        style: {
+          width: '5rem',
+          height: '5rem',
+          display: 'flex',
+          alignItems: 'center',
+          borderRadius: '10rem',
+          justifyContent: 'center',
+          backgroundColor: 'white',
+          border: '0.3px solid black'
+        },
+        selectable: true
+      }));
+
+      // Guardar en estado y localStorage
+      setGraph(newGraph);
+      setNodes(newNodes);
+      setEdges(newEdges);
+
+      saveGraph(newGraph);
+      savePlotNodes(newNodes);
+      savePlotEdges(newEdges);
+    };
+
+    reader.readAsText(file);
+  };
+
+
   return (
     <div className='graph'>
       <ul className={`buttons-list ${showButtons ? 'show': ''}`}>
           <li><Button text={'🟢 Agregar nodo'} color={'#002642'} textColor={'white'} onClick={addNode}/></li>
           <li><Button text={'🗑️ Eliminar nodo'} color={'#DD1C1A'} textColor={'white'} onClick={removeNode}/></li>
+          <li><Button text={'📄 Cargar CSV'} color={'#007BFF'} textColor={'white'} onClick={() => document.getElementById('fileInput').click()} />
+              <input
+                type="file"
+                accept=".csv,.txt"
+                id="fileInput"
+                style={{ display: 'none' }}
+                onChange={handleFileUpload}
+              />
+          </li>
       </ul>
       
       <ReactFlow 
@@ -168,7 +256,7 @@ const Graph = (
         onConnect={addEdge}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
-        onNodeDragStop={onNodeDragStop}
+        onNodeDragStop={showButtons ? onNodeDragStop : null}
       >
         <Background />
         <Controls />

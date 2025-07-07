@@ -38,7 +38,11 @@ const SideBar = () => {
                             </li>
 
                             <li className='sidebar-item'>
-                                <a href="/crc">Cyclic Redundancy Check</a>
+                                <a href="/link-state">Estado del enlace</a>
+                            </li>
+
+                            <li className='sidebar-item'>
+                                <a href="/crc">Comprobación de redundancia cíclica</a>
                             </li>
 
                         </ul>

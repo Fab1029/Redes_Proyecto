@@ -1,0 +1,98 @@
+.link-state-page {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    overflow-y: auto;
+}
+
+.link-state-right-container {
+    width: 100%;
+    height: 100%;
+}
+
+.link-state-left-container {
+    gap: 1rem;
+    width: 55%;
+    height: 100vh;
+    display: flex;
+    padding: 0.5rem;
+    flex-direction: column;
+}
+
+.options-link-state-list {
+    gap: 1rem;
+    display: flex;
+    padding: 0.5rem;
+    width: fit-content;
+    margin-left: 20rem;
+    border-radius: 1rem;
+    align-items: center;
+    justify-content: flex-end;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-table-container, .network-topology-container{
+    width: 100%;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-header-container {
+    gap: 1rem;
+    display: flex;
+    margin: 1rem 0;
+    padding: 0.5rem;
+    width: fit-content;
+    align-items: center;
+    border-radius: 1rem;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-body-container {
+    gap: 1rem;
+    width: 100%;
+    margin: 1rem 0;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.links-list {
+    overflow-y: auto;
+    max-height: 200px;    
+}
+
+.link-item {
+    display: flex;
+    margin: 1rem 0;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.tables-links-container {
+    flex: 1;
+    gap: 1rem;
+    min-height: 0;
+    display: grid;
+    padding: 0.5rem;
+    overflow-y: auto;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.network-topology-container {
+    flex: 1;
+    display: flex;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    overflow: hidden; 
+    border-radius: 1rem;
+    flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.link-state-table {
+    height: fit-content;
+}

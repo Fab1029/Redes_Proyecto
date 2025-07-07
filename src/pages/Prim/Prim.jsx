@@ -61,7 +61,7 @@ const Prim = () => {
     <div className='prim-page'>
         <SideBar/>
       <div className='left-prim-container'>
-        <h1 className='title-graph-prim'>Grafo</h1>
+        {/*<h1 className='title-graph-prim'>Grafo</h1>*/}
           <Graph useGraph={[graph, setGraph]} useNodes={[nodes, setNodes, onNodesChange]} useEdges={[edges, setEdges, onEdgesChange]} showButtons={true}/>
       </div>
       <div className='right-prim-container'>

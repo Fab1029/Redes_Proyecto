@@ -9,7 +9,7 @@
 }
 
 .buttons-list.show {
-    bottom: 1%;
+    top: 1%;
     right: 1%;
     gap: 10px;
     z-index: 10;

@@ -86,7 +86,7 @@ const Dijkstra = () => {
                 />
 
             </div>
-            
+
             <div className='dijkstra-table-container'>
                 <h1>Matriz Dijkstra</h1>
                 {dijkstraMatrix && dijkstraTranslateMatrix && (
@@ -111,7 +111,7 @@ const Dijkstra = () => {
                                     dijkstraMatrix[rowIdx][colIdx] !== null &&
                                     dijkstraMatrix[rowIdx][colIdx] !== undefined &&
                                     dijkstraMatrix[rowIdx][colIdx]['isDefinitive'] === true ? (
-                                        <td key={`${rowIdx}-${colIdx}`} style={{ background: '#ff00002d', border: '1px solid black', padding: '8px' }}>
+                                        <td key={`${rowIdx}-${colIdx}`} style={{ background: '#E98A15', border: '1px solid black', padding: '8px' }}>
                                             {cell}
                                         </td>
                                     ) : (
