@@ -22,7 +22,7 @@ const SideBar = () => {
                         <ul className='sidebar-list'>
                             
                             <li className='sidebar-item'>
-                                <a href="/">Home</a>
+                                <a href="/">Inicio</a>
                             </li>
                             
                             <li className='sidebar-item'>

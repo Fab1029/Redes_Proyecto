@@ -6,51 +6,56 @@ import SideBar from '../../components/SideBar/SideBar'
 import Button from '../../components/Button/Button'
 
 const Hamming = () => {
-  const [modifyBit, setModifyBit] = useState(false);
   const [message, setMessage] = useState('');
-
+  const [modifyBit, setModifyBit] = useState(false);
+  
   const hamming = new HammingAlgorithm();  
   const [errorBit, setErrorBit] = useState(null);
   const [bitsNumber, setBitsNumber] = useState(null);
   const [parityNumber, setParityNumber] = useState(null);
   const [frameHamming, setFrameHamming] = useState(null);
   const [parityMatrix, setParityMatrix] = useState(null);
+  const [parityMatrixSteps, setParityMatrixSteps] = useState([]);
+  const [frameHammingSent, setFrameHammingSent] = useState(null);
 
   const handleCalculteButton = () => {
     const messageInput = message.trim().split('');
     const sent = modifyBit ? setRandomErrorBit(messageInput) : messageInput;
 
-    const frameParityMatrix = hamming.buildParityMatrix(messageInput);
     const frameErrorParityMatrix = hamming.buildParityMatrix(sent);
+    const frameParityMatrix = hamming.buildParityMatrix(messageInput);
+    console.log(frameErrorParityMatrix)
+    const frameHammingBuild = hamming.buildHammingFrame(messageInput, frameParityMatrix.parity_matrix);
+    const frameErrorHammingBuild = hamming.buildHammingFrame(sent, frameErrorParityMatrix.parity_matrix);
 
-    const frameHammingBuild = hamming.buildHammingFrame(messageInput, frameParityMatrix);
-    const frameErrorHammingBuild = hamming.buildHammingFrame(sent, frameErrorParityMatrix);
-
-    const detectedErrorBit = hamming.getPositionErrorBit(
-        frameHammingBuild.split(''), 
-        frameErrorHammingBuild.split('')
-    );
+    const detectedErrorBit = hamming.getPositionErrorBit(frameHammingBuild.split(''), frameErrorHammingBuild.split(''));
 
     setBitsNumber(messageInput.length);
     setParityNumber(hamming.getParityBitsCount(messageInput));
     setFrameHamming(frameErrorHammingBuild);
+    setFrameHammingSent(frameHammingBuild);
     setErrorBit(
         detectedErrorBit === 0 ? 
             'Trama enviada sin errores' : 
             detectedErrorBit
     );
-    setParityMatrix(frameErrorParityMatrix);
+    // Cambiar qui deno mnada rla lista de step de tablas 
+    setParityMatrix(frameErrorParityMatrix.parity_matrix);
+    setParityMatrixSteps(frameErrorParityMatrix.steps);
 
   };
 
   const handleClearButton = () => {
     setMessage('');
-    setModifyBit(false);
     setErrorBit(null);
+    setModifyBit(false);
     setBitsNumber(null);
     setParityNumber(null);
     setFrameHamming(null);
+
     setParityMatrix(null);
+    setParityMatrixSteps([]);
+    setFrameHammingSent(null);
   };
 
   return (
@@ -112,6 +117,11 @@ const Hamming = () => {
             </div>
 
             <div className='text-container'>
+                <h1>Trama Hamming Enviada</h1>
+                <p className='output-text'>{frameHammingSent}</p>
+            </div>
+
+            <div className='text-container'>
                 <h1>Bit errado</h1>
                 <p className='output-text'>{errorBit}</p>
             </div>
@@ -120,15 +130,15 @@ const Hamming = () => {
         </div>
 
         <div className='right-side-container'>
-            <h1>Matriz de pariedad de Hamming</h1>
+            <h2>Matriz de pariedad de Hamming</h2>
             
             {parityMatrix && (
-                <table className='parity-table' style={{ borderCollapse: 'collapse', width: '100%' }}>
+                <table className='table'>
                     <thead>
                         <tr>
-                            <th style={{ border: '1px solid black', padding: '8px' }}></th>
+                            <th></th>
                             {parityMatrix[0].map((_, colIdx) => (
-                                <th key={`${colIdx}`} style={{ border: '1px solid black', padding: '8px' }}>
+                                <th key={`${colIdx}`}>
                                 {colIdx + 1}
                                 </th>
                             ))}
@@ -137,11 +147,11 @@ const Hamming = () => {
                     <tbody>
                         {parityMatrix.map((row, rowIdx) => (
                         <tr key={`row-${rowIdx}`}>
-                            <th style={{ border: '1px solid black', padding: '8px' }}>
+                            <th>
                                 {Math.pow(2, rowIdx)}
                             </th>
                             {row.map((cell, colIdx) => (
-                            <td key={`${rowIdx}-${colIdx}`} style={{ border: '1px solid black', padding: '8px' }}>
+                            <td key={`${rowIdx}-${colIdx}`}>
                                 {cell !== null ? cell : '-'}
                             </td>
                             ))}
@@ -151,6 +161,35 @@ const Hamming = () => {
                 </table>
             )}
 
+            {setParityMatrixSteps.length > 0 && (
+                parityMatrixSteps.map((stepMatrix, stepIndex) => (
+                    <div key={`step-${stepIndex}`} className="matrix-step-container">
+                        <h3>Paso {stepIndex + 1}</h3>
+                        <table className='table'>
+                            <thead>
+                            <tr>
+                                <th></th>
+                                {stepMatrix[0].map((_, colIdx) => (
+                                <th key={`header-${colIdx}`}>{colIdx + 1}</th>
+                                ))}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {stepMatrix.map((row, rowIdx) => (
+                                <tr key={`row-${rowIdx}`}>
+                                <th>{Math.pow(2, rowIdx)}</th>
+                                {row.map((cell, colIdx) => (
+                                    <td key={`cell-${rowIdx}-${colIdx}`}>
+                                    {cell !== null ? cell : '-'}
+                                    </td>
+                                ))}
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                    </div>
+            )))}
+            
         </div>
       
     </div>

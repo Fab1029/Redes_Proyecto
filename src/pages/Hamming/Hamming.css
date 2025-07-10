@@ -22,9 +22,9 @@
   gap: 1.5rem;
   display: flex;
   padding: 2rem;
+  max-height: 90vh;       
+  overflow-y: auto;  
   border-radius: 10px;
-  align-items: center;
-  height: fit-content;
   flex-direction: column;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }

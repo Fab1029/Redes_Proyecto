@@ -6,6 +6,13 @@
   box-sizing: border-box;
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden; 
+}
+
 /* Variables y estilos base */
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;

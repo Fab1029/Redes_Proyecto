@@ -42,13 +42,10 @@
 .form-header-container {
     gap: 1rem;
     display: flex;
-    margin: 1rem 0;
     padding: 0.5rem;
     width: fit-content;
     align-items: center;
-    border-radius: 1rem;
     justify-content: space-between;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .form-body-container {
@@ -56,8 +53,6 @@
     width: 100%;
     margin: 1rem 0;
     padding: 0.5rem;
-    border-radius: 1rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .links-list {

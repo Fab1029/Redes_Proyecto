@@ -219,6 +219,19 @@ export class Dijkstra {
 
         return dijkstra_matrix;
     }
+
+    getPathWeight(dijkstra_matrix, graph, end) {
+        const index_row = this.getRowIndex(graph, end);
+        for (let j = 0; j < graph.length; j++) {
+            if (dijkstra_matrix[index_row][j] !== null && 
+                dijkstra_matrix[index_row][j] !== undefined && 
+                dijkstra_matrix[index_row][j]['isDefinitive'] === true) {
+                
+                return dijkstra_matrix[index_row][j].weight;
+
+            }
+        }
+    }
 }
 
 

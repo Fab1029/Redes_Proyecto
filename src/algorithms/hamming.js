@@ -43,6 +43,7 @@ export class Hamming {
             [[]]: Matriz de paridad construida a partir del frame
     */
     buildParityMatrix(frame) {
+        let parity_matrix_steps = [];
         const lengthFrame = frame.length;
         const parityBitsCount = this.getParityBitsCount(frame);
 
@@ -54,14 +55,18 @@ export class Hamming {
         
         // Llenar la matriz de paridad
         let index_frame = 0;
-        for (let i = 0; i < lengthFrame + parityBitsCount; i++) {
-            if (isPowerOfTwo(i + 1) === false) {
+        for (let j = 0; j < lengthFrame + parityBitsCount; j++) {
+            if (isPowerOfTwo(j + 1) === false) {
                 // Se agrega el bit a la matriz de paridad
-                this.getParityRows(i + 1).forEach((row_index) => {
-                    parity_matrix[row_index][i] = frame[index_frame];
+                this.getParityRows(j + 1).forEach((row_index) => {
+                    parity_matrix[row_index][j] = frame[index_frame];
                 });
 
                 index_frame++;
+
+                // Agregar matrices de pariedad a los steps
+                parity_matrix_steps.push(parity_matrix.map(row => row.slice()));
+
             }
         }
 
@@ -72,9 +77,13 @@ export class Hamming {
             const ones_count = row.filter(bit => bit === '1').length;
 
             row[parity_bit_position] = (ones_count % 2 === 0) ? '0' : '1';
+
+            // Agregar matrices de pariedad a los steps
+            parity_matrix_steps.push(parity_matrix.map(row => row.slice()));
+
         });
 
-        return parity_matrix;
+        return {parity_matrix: parity_matrix, steps: parity_matrix_steps};
 
     }
 

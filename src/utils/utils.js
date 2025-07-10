@@ -2,7 +2,7 @@
     @param:
         frame list: Lista de bits del frame
     @return:
-        List string: String de bits del frame
+        frame_copy list: Lista de bits del frame
 */
 export function setRandomErrorBit(frame) {
     let frame_copy = [...frame]; 

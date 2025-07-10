@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { use, useEffect, useRef, useState } from 'react'
 import './Dijkstra.css'
 import { loadGraph, loadPloatNodes, loadPlotEdges} from '../../data/data.js'
 import { Dijkstra as DijkstraAlgorithm } from '../../algorithms/dijkstra.js'
@@ -21,14 +21,17 @@ const Dijkstra = () => {
   const selectorNodeStart = useRef();  
   const [route, setRoute] = useState(null);
   const dijkstra = new DijkstraAlgorithm();
+  const [weightRoute, setWeightRoute] = useState(null);
   const [dijkstraMatrix, setDijkstraMatrix] = useState(null);
   const [dijkstraTranslateMatrix, setDijkstraTranslateMatrix] = useState(null);
   
   useEffect(() => {
     
+    setRoute(null);
+    setWeightRoute(null);
     setDijkstraMatrix(null);
     setDijkstraTranslateMatrix(null);
-    setRoute(null);
+    
 
   }, [graph]);
 
@@ -42,8 +45,10 @@ const Dijkstra = () => {
     const rawDijkstraMatrix = dijkstra.buildDijkstraMatrix(graph, startNode);
     const translateDijkstraMatrix = dijkstra.translateDijkstraMatrix(rawDijkstraMatrix);
     const pathRoute = dijkstra.getPath(rawDijkstraMatrix, graph, startNode, endNode);
+    const weight = dijkstra.getPathWeight(rawDijkstraMatrix, graph, endNode);
     
     setRoute(pathRoute);
+    setWeightRoute(weight);
     setDijkstraMatrix(rawDijkstraMatrix);
     setDijkstraTranslateMatrix(translateDijkstraMatrix)
   };
@@ -87,15 +92,25 @@ const Dijkstra = () => {
 
             </div>
 
+            <div className='text-container-route'>
+                <h2>Ruta seleccionada</h2>
+                <p className='output-text'>{route}</p>
+            </div>
+                        
+            <div className='text-container-route'>
+                <h2>Peso</h2>
+                <p className='output-text'>{weightRoute}</p>
+            </div>
+
             <div className='dijkstra-table-container'>
-                <h1>Matriz Dijkstra</h1>
+                <h2>Matriz Dijkstra</h2>
                 {dijkstraMatrix && dijkstraTranslateMatrix && (
-                    <table className='parity-table' style={{ borderCollapse: 'collapse', width: '100%' }}>
+                    <table className='table'>
                         <thead>
                             <tr>
-                                <th style={{ border: '1px solid black', padding: '8px' }}></th>
+                                <th></th>
                                 {dijkstraMatrix[0].map((_, colIdx) => (
-                                    <th key={`${colIdx}`} style={{ border: '1px solid black', padding: '8px' }}>
+                                    <th key={`${colIdx}`}>
                                     {colIdx + 1}
                                     </th>
                                 ))}
@@ -104,18 +119,18 @@ const Dijkstra = () => {
                         <tbody>
                             {dijkstraTranslateMatrix.map((row, rowIdx) => (
                             <tr key={`row-${rowIdx}`}>
-                                <th style={{ border: '1px solid black', padding: '8px' }}>
+                                <th>
                                     {graph[rowIdx].label}
                                 </th>
                                 {row.map((cell, colIdx) => (
                                     dijkstraMatrix[rowIdx][colIdx] !== null &&
                                     dijkstraMatrix[rowIdx][colIdx] !== undefined &&
                                     dijkstraMatrix[rowIdx][colIdx]['isDefinitive'] === true ? (
-                                        <td key={`${rowIdx}-${colIdx}`} style={{ background: '#E98A15', border: '1px solid black', padding: '8px' }}>
+                                        <td key={`${rowIdx}-${colIdx}`} style={{ background: '#002642', color: 'white'}}>
                                             {cell}
                                         </td>
                                     ) : (
-                                        <td key={`${rowIdx}-${colIdx}`} style={{ border: '1px solid black', padding: '8px' }}>
+                                        <td key={`${rowIdx}-${colIdx}`}>
                                             {cell}
                                         </td>
                                     )
@@ -127,11 +142,6 @@ const Dijkstra = () => {
                 )}
             </div>
             
-            <div className='text-container-route'>
-                <h1>Ruta seleccionada</h1>
-                <p className='output-text'>{route}</p>
-            </div>
-
         </div>
       
     </div>

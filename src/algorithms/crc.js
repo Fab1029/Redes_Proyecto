@@ -7,31 +7,52 @@ export class CRC {
             frame list: Lista de bits del frame
             polynomial list: Lista de bits del polinomio generador
         @return:
-            frame_bits string: String del residuo de la division entre el frame y el polinomio
+            frame_bits dict: lista de residuo ademas de los pasos de la division
     */
     getResidue(frame, polynomial) {
         let frame_bits = [];
+        let division_steps = [];
+        let flag_star_steps = false;
 
         for (let i = 0; i < frame.length; i++) {
             frame_bits.push(frame[i]); 
 
             if(parseInt(frame_bits.join(''), 2) >= parseInt(polynomial.join(''), 2)) {
-                
-                let cociente = [];
-                for(let j = 0; j < polynomial.length; j++) {
-                    cociente.push(XOR(frame_bits[j], polynomial[j]));
-                }
-                
-                // Elimnar ceros a la izquierda
-                while(cociente[0] === '0') {
-                    cociente.shift();
-                }
+                if (flag_star_steps === false) flag_star_steps = true;
 
-                frame_bits = cociente;
+                let residue = [];
+                for(let j = 0; j < polynomial.length; j++) {
+                    residue.push(XOR(frame_bits[j], polynomial[j]));
+                }
+                
+                // Guardar resultados intermedios
+                division_steps.push({
+                    dividendo: [...frame_bits],
+                    divisor: [...polynomial],
+                    cociente: '1',
+                    residuo: [...residue]
+                });
+         
+                // Elimnar ceros a la izquierda
+                while(residue[0] === '0') {
+                    residue.shift();
+                };
+
+                frame_bits = residue;
+            }
+
+            else if(flag_star_steps && parseInt(frame_bits.join(''), 2) < parseInt(polynomial.join(''), 2)) {
+                // Guardar resultados intermedios
+                division_steps.push({
+                    dividendo: [...Array.from({length: polynomial.length - frame_bits.length}, () => '0'), ...frame_bits],
+                    divisor: Array.from({length: polynomial.length}, () => '0'),
+                    cociente: '0',
+                    residuo: [...Array.from({length: polynomial.length - frame_bits.length}, () => '0'), ...frame_bits]
+                });
             }
         }
 
-        return frame_bits.join('');
+        return {residue: frame_bits, division_steps: division_steps};
 
     }
     
@@ -50,7 +71,7 @@ export class CRC {
             frame_with_zeros.push('0'); 
         }
         
-        return frame.join('') + this.getResidue(frame_with_zeros, polynomial);
+        return frame.join('') + this.getResidue(frame_with_zeros, polynomial).residue.join('');
     }
 
     /*
@@ -63,9 +84,9 @@ export class CRC {
         for (const[length, polynomial] of Object.entries(CRC_POLYNOMIALS)) {
             if (frame.length > length) {
                 const frame_transmited = this.buidFrameTransmission(frame.split(''), polynomial.split(''));
-                const quotient = this.getResidue(frame_transmited.split(''), polynomial.split(''));
+                const quotient = this.getResidue(frame_transmited.split(''), polynomial.split('')).residue.join('');
 
-                if (parseInt(quotient.join(''), 10) === 0) {
+                if (parseInt(quotient, 10) === 0) {
                     return polynomial;
                 }
             }

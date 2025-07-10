@@ -10,14 +10,14 @@
 }
 
 .right-dijkstra-container {
-    padding: 1rem;
     width: 100%;
-    height: fit-content;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     height: 100%;
+    padding: 1rem;
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+    flex-direction: column;
+    
 }
 
 .selecter-nodes-container {
@@ -31,9 +31,9 @@
     padding: 1rem;
     display: flex;
     margin: 1rem 0;
+    overflow-y: auto;
     border-radius: 1rem;
     align-items: center;
-    height: fit-content;
     flex-direction: column;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -41,6 +41,7 @@
 .text-container-route {
     width: 100%;
     padding: 1rem;
+    margin-top: 1rem;
     border-radius: 1rem;
     background-color: white;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -69,4 +70,31 @@
 .custom-select option {
     color: #333333;
     background-color: white;
+}
+
+.table {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    border-collapse: collapse;
+}
+
+.table thead {
+  text-align: left;
+}
+
+.table th,
+.table td {
+  padding: 0.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.table th {
+  font-weight: 600;
+  text-align: center;
+}
+
+.table td {
+  font-weight: 400;
+  text-align: center;
 }

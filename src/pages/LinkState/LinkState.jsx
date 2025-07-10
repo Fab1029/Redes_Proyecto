@@ -92,10 +92,10 @@ const LinkState = () => {
             </ul>
 
             <div className='add-table-container'>
-                <h1>Gestionar tabla</h1>
+                <h2>Gestionar tabla</h2>
                 <div className='form-container'>
                     <div className='form-header-container'>
-                        <h3>Router incial</h3>
+                        <h4>Router incial</h4>
                         <input 
                             className='input'
                             placeholder='Agregar nombre de router'
@@ -104,7 +104,7 @@ const LinkState = () => {
                         />
                         <Button 
                             text={'➕ Agregar enlace'} 
-                            color={'gray'} 
+                            color={'#7E7F83'} 
                             textColor={'white'} 
                             onClick={() => {
                                     const newLink = { to: '', weight: '' };
@@ -121,11 +121,11 @@ const LinkState = () => {
           
                     </div>
                     <div className='form-body-container'>
-                        <h2>Enlaces</h2>
+                        <h3>Enlaces</h3>
                         <ul className='links-list'>
                             {links.map((link, index) => (
                                 <li key={index} className='link-item'>
-                                    <h3>Router destino</h3>
+                                    <h4>Router destino</h4>
                                     <input 
                                         className='input' 
                                         placeholder='Agregar nombre del router' 
@@ -136,7 +136,7 @@ const LinkState = () => {
                                             setLinks(newLinks);
                                         }}      
                                     />
-                                    <h3>Peso</h3>
+                                    <h4>Peso</h4>
                                     <input 
                                         className='input' 
                                         placeholder='Ingresar peso del enlace' 
@@ -167,36 +167,31 @@ const LinkState = () => {
             </div>
 
             <div className='network-topology-container'>
-                <h1>Estado del enlace</h1>
+                <h2>Estado del enlace</h2>
                 <div className='tables-links-container'>
 
                     {graph.map((node, index) => (
                         <table 
                             key={index} 
-                            className="link-state-table" 
+                            className="table link-state-table" 
                             onClick={() => {setSelectedTableIndex(index)}} 
-                            style={
-                                {   borderCollapse: 'collapse', 
-                                    width: '100%',
-                                    backgroundColor: selectedTableIndex === index ? '#e98a1591' : 'white', 
-                                }
-                            }
+                            style={{ backgroundColor: selectedTableIndex === index ? '#e98a1591' : 'white'}}
                         >
                             <thead>
                                 <tr>
-                                    <th style={{ border: '1px solid black', padding: '8px' }}>Router inicial</th>
-                                    <th style={{ border: '1px solid black', padding: '8px' }}>{node.label}</th>
+                                    <th>Router inicial</th>
+                                    <th>{node.label}</th>
                                 </tr>
                                 <tr>
-                                    <th style={{ border: '1px solid black', padding: '8px' }} >Destino</th>
-                                    <th style={{ border: '1px solid black', padding: '8px' }} >Peso</th>
+                                    <th>Destino</th>
+                                    <th>Peso</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {node.edges.map((edge, idx) => (
-                                <tr key={idx} style={{ border: '1px solid black', padding: '8px' }} >
-                                    <td style={{ border: '1px solid black', padding: '8px' }} >{edge.node.label}</td>
-                                    <td style={{ border: '1px solid black', padding: '8px' }} >{edge.weight}</td>
+                                <tr key={idx}>
+                                    <td>{edge.node.label}</td>
+                                    <td>{edge.weight}</td>
                                 </tr>
                                 ))}
                             </tbody>
