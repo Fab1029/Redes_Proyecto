@@ -15,11 +15,11 @@ export class CRC {
         let flag_star_steps = false;
 
         for (let i = 0; i < frame.length; i++) {
+            
             frame_bits.push(frame[i]); 
-
-            if(parseInt(frame_bits.join(''), 2) >= parseInt(polynomial.join(''), 2)) {
-                if (flag_star_steps === false) flag_star_steps = true;
-
+            
+            if(frame_bits.length === polynomial.length) {
+                
                 let residue = [];
                 for(let j = 0; j < polynomial.length; j++) {
                     residue.push(XOR(frame_bits[j], polynomial[j]));
@@ -34,14 +34,17 @@ export class CRC {
                 });
          
                 // Elimnar ceros a la izquierda
-                while(residue[0] === '0') {
+                while(residue.length > 0 && residue[0] === '0') {
                     residue.shift();
                 };
 
                 frame_bits = residue;
+
+                // Por primera vez se ha realizado una division
+                flag_star_steps = true;
             }
 
-            else if(flag_star_steps && parseInt(frame_bits.join(''), 2) < parseInt(polynomial.join(''), 2)) {
+            else if(flag_star_steps && frame_bits.length < polynomial.length) {
                 // Guardar resultados intermedios
                 division_steps.push({
                     dividendo: [...Array.from({length: polynomial.length - frame_bits.length}, () => '0'), ...frame_bits],
@@ -50,6 +53,14 @@ export class CRC {
                     residuo: [...Array.from({length: polynomial.length - frame_bits.length}, () => '0'), ...frame_bits]
                 });
             }
+
+            // Si aún no hemos empezado la división, eliminamos ceros iniciales
+            if (!flag_star_steps) {
+                while (frame_bits.length > 0 && frame_bits[0] === '0') {
+                    frame_bits.shift();
+                }
+            }
+
         }
 
         return {residue: frame_bits, division_steps: division_steps};

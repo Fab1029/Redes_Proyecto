@@ -12,29 +12,31 @@ const CyclicRedundancyCheck = () => {
   const [generator, setGenerator] = useState('');
   const [modifyBit, setModifyBit] = useState(false);
 
+  const [frame, setFrame] = useState(null);
   const [residue, setResidue] = useState(null);
-  const [frameSend, setFrameSend] = useState(null);
-  const [divisionSteps, setDivisionSteps] = useState(null);
-  const [frameTransmission, setFrameTransmission] = useState(null);
+  const [frameTransmited, setFrameTransmited] = useState(null);
+  const [divisionStepsFrameTransmited, setDivisionStepsFrameTransmited] = useState(null);
   
   
   const handleCalculate = () => {
-    const frame = crc.buidFrameTransmission(
+    const buildFrame = crc.buidFrameTransmission(
       message.trim().split(''),
       generator.trim().split('')
     );
     
-    const sent = modifyBit ? setRandomErrorBit(frame).join('') : frame;
-    const result = crc.getResidue(sent, generator.trim().split(''));
+    const transmited = modifyBit ? setRandomErrorBit(buildFrame).join('') : buildFrame;
+    const result = crc.getResidue(transmited, generator.trim().split(''));
 
+    // Informacion adicional de transmicion de trama
     const residueResult = result.residue;
-    const steps = result.division_steps;
+    const stepsTransmited = result.division_steps;
 
-    setFrameTransmission(frame);
-    setFrameSend(sent);
+    setFrame(buildFrame);
     setResidue(residueResult);
-    setDivisionSteps(steps);
-    console.log(steps);
+    setFrameTransmited(transmited);
+    setDivisionStepsFrameTransmited(stepsTransmited);
+
+    console.log(stepsTransmited);
   
   };
 
@@ -43,10 +45,10 @@ const CyclicRedundancyCheck = () => {
     setGenerator('');
     setModifyBit(false);    
 
-    setFrameTransmission(null);
-    setFrameSend(null);
+    setFrame(null);
     setResidue(null);
-    setDivisionSteps(null);
+    setFrameTransmited(null);
+    setDivisionStepsFrameTransmited(null);
   };
 
   return (
@@ -106,12 +108,12 @@ const CyclicRedundancyCheck = () => {
         
         <div className='text-container'>
           <h1>Trama</h1>
-          <p className='output-text'>{frameTransmission}</p>
+          <p className='output-text'>{frame}</p>
         </div>
 
         <div className='text-container'>
           <h1>Enviado</h1>
-          <p className='output-text'>{frameSend}</p>
+          <p className='output-text'>{frameTransmited}</p>
         </div>
 
         <div className='text-container'>
@@ -122,12 +124,12 @@ const CyclicRedundancyCheck = () => {
       </div>
 
       <div className='right-side-crc-container'>
-            <h2>Division Binaria Comprobacion Trama Enviada</h2>
-            {divisionSteps && (
+            <h2>División Binaria Comprobación Trama Enviada</h2>
+            {divisionStepsFrameTransmited && (
             <table className='table-division'>
               <thead>
                 <tr>
-                  {frameSend.split('').map((bit, index) => (
+                  {frameTransmited.split('').map((bit, index) => (
                     <th key={`frame-${index}`}>{bit}</th>
                   ))}
                   <th>{'➗'}</th>{/*ESPACIO*/}
@@ -137,7 +139,7 @@ const CyclicRedundancyCheck = () => {
                 </tr>
               </thead>
               <tbody>
-                {divisionSteps.map((step, numberStep) => (
+                {divisionStepsFrameTransmited.map((step, numberStep) => (
                   <React.Fragment key={`step-${numberStep}`}>
                     {/* Dividendo */}
                     <tr>
@@ -149,12 +151,12 @@ const CyclicRedundancyCheck = () => {
                       ))}
                       {numberStep === 0 && (
                         <>
-                          {Array.from({ length: frameSend.length - generator.length }).map((_, i) => (
+                          {Array.from({ length: frameTransmited.length - generator.length }).map((_, i) => (
                             <td key={`empty-cociente-${i}`}></td>
                           ))}
                           <td></td>
-                          {divisionSteps.map((stepCociente, i) => (
-                            <td key={`cociente-${i}`}>{stepCociente.cociente}</td>
+                          {divisionStepsFrameTransmited.map((stepCociente, i) => (
+                            <td className='quotient-table' key={`cociente-${i}`}>{stepCociente.cociente}</td>
                           ))}
                         </>
                       )}
