@@ -233,12 +233,20 @@ const Graph = (
     reader.readAsText(file);
   };
 
+  const clearGraph = () => {
+    setGraph([]);
+    setNodes([]);
+    setEdges([]);
+
+    saveGraph([]);
+    savePlotNodes([]);
+    savePlotEdges([]);
+  };
 
   return (
     <div className='graph'>
       <ul className={`buttons-list ${showButtons ? 'show': ''}`}>
           <li><Button text={'🟢 Agregar nodo'} color={'#002642'} textColor={'white'} onClick={addNode}/></li>
-          <li><Button text={'🗑️ Eliminar nodo'} color={'#DD1C1A'} textColor={'white'} onClick={removeNode}/></li>
           <li><Button text={'📄 Cargar CSV'} color={'#007BFF'} textColor={'white'} onClick={() => document.getElementById('fileInput').click()} />
               <input
                 type="file"
@@ -248,6 +256,9 @@ const Graph = (
                 onChange={handleFileUpload}
               />
           </li>
+          <li><Button text={'🗑️ Eliminar nodo'} color={'#E98A15'} textColor={'white'} onClick={removeNode}/></li>
+          <li><Button text={'🗑️ Borrar grafo'} color={'#DD1C1A'} textColor={'white'} onClick={clearGraph}/></li>
+          
       </ul>
       
       <ReactFlow 
@@ -256,6 +267,7 @@ const Graph = (
         onConnect={addEdge}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
+        defaultViewport={{ x: 0, y: 0, zoom: 0.6 }}
         onNodeDragStop={showButtons ? onNodeDragStop : null}
       >
         <Background />

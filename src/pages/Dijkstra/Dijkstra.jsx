@@ -82,29 +82,31 @@ const Dijkstra = () => {
 
                     </select>
                 </div>
-
-                <Button 
-                    text={'Calcular'} 
-                    color={'#002642'} 
-                    textColor={'white'}
-                    onClick={handleCalcuteButton}
-                />
+                <div className='button-selector-container'>
+                    <Button 
+                        text={'Calcular'} 
+                        color={'#002642'} 
+                        textColor={'white'}
+                        onClick={handleCalcuteButton}
+                    />
+                </div>
+                
 
             </div>
-
-            <div className='text-container-route'>
-                <h2>Ruta seleccionada</h2>
-                <p className='output-text'>{route}</p>
-            </div>
+            {dijkstraMatrix && dijkstraTranslateMatrix && (
+                <>
+                <div className='text-container-route'>
+                    <h2>Ruta seleccionada</h2>
+                    <p className='output-text'>{route}</p>
+                </div>
                         
-            <div className='text-container-route'>
-                <h2>Peso</h2>
-                <p className='output-text'>{weightRoute}</p>
-            </div>
+                <div className='text-container-route'>
+                    <h2>Peso</h2>
+                    <p className='output-text'>{weightRoute}</p>
+                </div>
 
-            <div className='dijkstra-table-container'>
-                <h2>Matriz Dijkstra</h2>
-                {dijkstraMatrix && dijkstraTranslateMatrix && (
+                <div className='dijkstra-table-container'>
+                    <h2>Matriz Dijkstra</h2>
                     <table className='table'>
                         <thead>
                             <tr>
@@ -139,11 +141,11 @@ const Dijkstra = () => {
                             ))}
                         </tbody>
                     </table>
-                )}
-            </div>
-            
+                
+                </div>
+                </>
+            )}
         </div>
-      
     </div>
   )
 }
