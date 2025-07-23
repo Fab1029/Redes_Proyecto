@@ -26,7 +26,7 @@ const Dijkstra = () => {
   const [dijkstraTranslateMatrix, setDijkstraTranslateMatrix] = useState(null);
   
   useEffect(() => {
-    
+    console.log('ENTRO POR QUE CAMBIO GRAPH');
     setRoute(null);
     setWeightRoute(null);
     setDijkstraMatrix(null);
@@ -93,7 +93,7 @@ const Dijkstra = () => {
                 
 
             </div>
-            {dijkstraMatrix && dijkstraTranslateMatrix && (
+            {graph.length > 0 && dijkstraMatrix && dijkstraTranslateMatrix && (
                 <>
                 <div className='text-container-route'>
                     <h2>Ruta seleccionada</h2>

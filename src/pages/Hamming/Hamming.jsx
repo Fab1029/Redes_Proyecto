@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { use, useRef, useState } from 'react'
 import './Hamming.css'
 import { Hamming as HammingAlgorithm} from '../../algorithms/hamming.js'
 import { setRandomErrorBit } from '../../utils/utils.js'
@@ -8,7 +8,8 @@ import Button from '../../components/Button/Button'
 const Hamming = () => {
   const [message, setMessage] = useState('');
   const [indexStep, setIndexStep] = useState(0);
-  const [modifyBit, setModifyBit] = useState(false);
+  const [bitPosition, setBitPosition] = useState(1);
+  const [selectedOption, setSelectedOption] = useState('none');
   
   const hamming = new HammingAlgorithm();  
   const [errorBit, setErrorBit] = useState(null);
@@ -21,19 +22,37 @@ const Hamming = () => {
 
   const handleCalculteButton = () => {
     const messageInput = message.trim().split('');
-    const sent = modifyBit ? setRandomErrorBit(messageInput) : messageInput;
+    
+    let sent = null;
+    
+    if (selectedOption === 'random') {
+        sent = setRandomErrorBit(messageInput).join('');
+    }
+    else if (selectedOption === 'manual' && bitPosition > 0 && bitPosition <= messageInput.length) {
+        let buildFrameArray = [...messageInput];
 
+        buildFrameArray[bitPosition - 1] === '0' 
+        ? buildFrameArray[bitPosition - 1] = '1' 
+        : buildFrameArray[bitPosition - 1] = '0';
+
+        sent = buildFrameArray.join('');
+    }
+    else {
+        sent = messageInput;
+    }
+    
     const frameErrorParityMatrix = hamming.buildParityMatrix(sent);
     const frameParityMatrix = hamming.buildParityMatrix(messageInput);
     const frameHammingBuild = hamming.buildHammingFrame(messageInput, frameParityMatrix.parity_matrix);
     const frameErrorHammingBuild = hamming.buildHammingFrame(sent, frameErrorParityMatrix.parity_matrix);
 
     const detectedErrorBit = hamming.getPositionErrorBit(frameHammingBuild.split(''), frameErrorHammingBuild.split(''));
-
+    
     setBitsNumber(messageInput.length);
-    setParityNumber(hamming.getParityBitsCount(messageInput));
-    setFrameHamming(frameErrorHammingBuild);
     setFrameHammingSent(frameHammingBuild);
+    setFrameHamming(frameErrorHammingBuild);
+    setParityNumber(hamming.getParityBitsCount(messageInput));
+
     setErrorBit(
         detectedErrorBit === 0 ? 
             'Trama enviada sin errores' : 
@@ -50,12 +69,14 @@ const Hamming = () => {
   const handleClearButton = () => {
     setMessage('');
     setErrorBit(null);
-    setModifyBit(false);
     setBitsNumber(null);
     setParityNumber(null);
     setFrameHamming(null);
 
+    setIndexStep(0);
+    setBitPosition(1);
     setParityMatrix(null);
+    setSelectedOption('none');
     setFrameHammingSent(null);
     setParityMatrixSteps(null);
   };
@@ -70,6 +91,10 @@ const Hamming = () => {
     if (indexStep > 0) {
         setIndexStep(indexStep - 1);
     };
+  };
+
+  const handleChangeOptionBit = (option) => {
+    setSelectedOption(option);
   };
 
   return (
@@ -91,11 +116,56 @@ const Hamming = () => {
             </div>
             <div className='input-container'>
                 <h1>Modificar bit</h1>
-                <input 
-                    type='checkbox'
-                    value={modifyBit}
-                    onChange={(e) => setModifyBit(e.target.checked)}  
-                />
+                <ul>
+                    <li key={'radio-button-none'} className='radio-button'>
+                        <input
+                            type='radio'
+                            name='modifyBit'
+                            value={'none'}
+                            checked={selectedOption === 'none'}
+                            onChange={() => {handleChangeOptionBit('none');}}
+                        />
+                        <label>Sin modificaciones</label>
+                    </li>
+                    <li key={'radio-button-random'} className='radio-button'>
+                        <input
+                            type='radio'
+                            name='modifyBit'
+                            value={'random'}
+                            checked={selectedOption === 'random'}
+                            onChange={() => {handleChangeOptionBit('random');}}
+                        />
+                        <label>Modificar bit aleatorio</label>
+                    </li>
+                    <li key={'radio-button-manual'} className='radio-button'>
+                        <input
+                            type='radio'
+                            name='modifyBit'
+                            value={'manual'}
+                            checked={selectedOption === 'manual'}
+                            onChange={() => {handleChangeOptionBit('manual');}}
+                        />
+                        <label>Modificar bit manual</label>
+                        {selectedOption === 'manual' && (
+                            <>
+                            <input
+                                type='number'
+                                min={1}
+                                value={bitPosition}
+                                placeholder='Ingresar indice bit'
+                                onChange={(e) => {
+                                const val = e.target.value; 
+                                if (/^[0-9]*$/.test(val))
+                                    setBitPosition(Number(val));
+                                }
+                                }
+                            />
+                            </>
+                        )}
+                    </li>
+
+                </ul>
+                
             </div>
 
             <div className='buttons-container'>

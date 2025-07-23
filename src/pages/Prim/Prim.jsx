@@ -61,13 +61,14 @@ const Prim = () => {
     <div className='prim-page'>
         <SideBar/>
       <div className='left-prim-container'>
-        {/*<h1 className='title-graph-prim'>Grafo</h1>*/}
           <Graph useGraph={[graph, setGraph]} useNodes={[nodes, setNodes, onNodesChange]} useEdges={[edges, setEdges, onEdgesChange]} showButtons={true}/>
       </div>
       <div className='right-prim-container'>
         <h1 className='title-graph-prim'>Arbol Prim</h1>
-          <Graph useGraph={[graph, setGraph]} useNodes={[nodesPrim, setNodesPrim, onNodesPrimChange]} useEdges={[edgesPrim, setEdgesPrim, onEdgesPrimChange]} showButtons={false}/>
-      </div>
+          {graph.length > 0 && (
+            <Graph useGraph={[graph, setGraph]} useNodes={[nodesPrim, setNodesPrim, onNodesPrimChange]} useEdges={[edgesPrim, setEdgesPrim, onEdgesPrimChange]} showButtons={false}/>
+          )}
+          </div>
     </div>
   )
 }

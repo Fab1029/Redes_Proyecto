@@ -7,7 +7,7 @@
 export function setRandomErrorBit(frame) {
     let frame_copy = [...frame]; 
 
-    let error_bit = Math.floor(Math.random() * frame_copy.length - 1);
+    let error_bit = Math.floor(Math.random() * frame_copy.length);
     frame_copy[error_bit] = frame_copy[error_bit] === '0' ? '1' : '0';
     return frame_copy;
 };
