@@ -122,7 +122,6 @@ const CyclicRedundancyCheck = () => {
         </div>
 
       </div>
-
       <div className='right-side-crc-container'>
             <h2>División Binaria Comprobación Trama Enviada</h2>
             {divisionStepsFrameTransmited && (

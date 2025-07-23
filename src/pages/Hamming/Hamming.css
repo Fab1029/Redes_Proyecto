@@ -24,6 +24,7 @@
   padding: 2rem;
   max-height: 90vh;       
   overflow-y: auto;  
+  height: fit-content;
   border-radius: 10px;
   flex-direction: column;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -35,3 +36,11 @@
   justify-content: center; 
 }
 
+.buttons-step-container {
+  gap: 2rem;
+  display: flex;
+  margin-top: 1rem;
+  align-items: center;
+  justify-content: center;
+  
+}

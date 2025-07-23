@@ -7,6 +7,7 @@ import Button from '../../components/Button/Button'
 
 const Hamming = () => {
   const [message, setMessage] = useState('');
+  const [indexStep, setIndexStep] = useState(0);
   const [modifyBit, setModifyBit] = useState(false);
   
   const hamming = new HammingAlgorithm();  
@@ -15,8 +16,8 @@ const Hamming = () => {
   const [parityNumber, setParityNumber] = useState(null);
   const [frameHamming, setFrameHamming] = useState(null);
   const [parityMatrix, setParityMatrix] = useState(null);
-  const [parityMatrixSteps, setParityMatrixSteps] = useState([]);
   const [frameHammingSent, setFrameHammingSent] = useState(null);
+  const [parityMatrixSteps, setParityMatrixSteps] = useState(null);
 
   const handleCalculteButton = () => {
     const messageInput = message.trim().split('');
@@ -24,7 +25,6 @@ const Hamming = () => {
 
     const frameErrorParityMatrix = hamming.buildParityMatrix(sent);
     const frameParityMatrix = hamming.buildParityMatrix(messageInput);
-    console.log(frameErrorParityMatrix)
     const frameHammingBuild = hamming.buildHammingFrame(messageInput, frameParityMatrix.parity_matrix);
     const frameErrorHammingBuild = hamming.buildHammingFrame(sent, frameErrorParityMatrix.parity_matrix);
 
@@ -39,9 +39,11 @@ const Hamming = () => {
             'Trama enviada sin errores' : 
             detectedErrorBit
     );
-    // Cambiar qui deno mnada rla lista de step de tablas 
+
     setParityMatrix(frameErrorParityMatrix.parity_matrix);
-    setParityMatrixSteps(frameErrorParityMatrix.steps);
+    frameErrorParityMatrix.steps.length > 0 
+        ? setParityMatrixSteps(frameErrorParityMatrix.steps) 
+        : setParityMatrixSteps(null);
 
   };
 
@@ -54,8 +56,20 @@ const Hamming = () => {
     setFrameHamming(null);
 
     setParityMatrix(null);
-    setParityMatrixSteps([]);
     setFrameHammingSent(null);
+    setParityMatrixSteps(null);
+  };
+
+  const handleNextStep = () => {
+    if (indexStep < parityMatrixSteps.length - 1) {
+        setIndexStep(indexStep + 1);
+    };
+  };
+
+  const handlePrevStep = () => {
+    if (indexStep > 0) {
+        setIndexStep(indexStep - 1);
+    };
   };
 
   return (
@@ -130,7 +144,7 @@ const Hamming = () => {
         </div>
 
         <div className='right-side-container'>
-            <h2>Matriz de pariedad de Hamming</h2>
+            <h2 style={{textAlign: 'center'}}>Matriz de pariedad de Hamming</h2>
             
             {parityMatrix && (
                 <table className='table'>
@@ -161,34 +175,50 @@ const Hamming = () => {
                 </table>
             )}
 
-            {setParityMatrixSteps.length > 0 && (
-                parityMatrixSteps.map((stepMatrix, stepIndex) => (
-                    <div key={`step-${stepIndex}`} className="matrix-step-container">
-                        <h3>Paso {stepIndex + 1}</h3>
-                        <table className='table'>
-                            <thead>
-                            <tr>
-                                <th></th>
-                                {stepMatrix[0].map((_, colIdx) => (
+            {parityMatrixSteps && (
+                <div className='matrix-step-container'>
+                    <h2>Paso {indexStep + 1} Matriz de pariedad de Hamming</h2>
+
+                    <table className='table'>
+                        <thead>
+                        <tr>
+                            <th></th>
+                            {parityMatrixSteps[indexStep][0].map((_, colIdx) => (
                                 <th key={`header-${colIdx}`}>{colIdx + 1}</th>
-                                ))}
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {stepMatrix.map((row, rowIdx) => (
-                                <tr key={`row-${rowIdx}`}>
-                                <th>{Math.pow(2, rowIdx)}</th>
-                                {row.map((cell, colIdx) => (
-                                    <td key={`cell-${rowIdx}-${colIdx}`}>
-                                    {cell !== null ? cell : '-'}
-                                    </td>
-                                ))}
-                                </tr>
                             ))}
-                            </tbody>
-                        </table>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {parityMatrixSteps[indexStep].map((row, rowIdx) => (
+                            <tr key={`row-${rowIdx}`}>
+                            <th>{Math.pow(2, rowIdx)}</th>
+                            {row.map((cell, colIdx) => (
+                                <td key={`cell-${rowIdx}-${colIdx}`}>
+                                {cell !== null ? cell : '-'}
+                                </td>
+                            ))}
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                    <div className='buttons-step-container'>
+                        <Button
+                            text={'🡸 Anterior'}
+                            color={indexStep > 0 ? '#002642' : 'gray'}
+                            textColor={'white'}
+                            onClick={handlePrevStep}
+                        />
+
+                        <Button
+                            text={'🡺 Siguiente'}
+                            color={indexStep < parityMatrixSteps.length - 1 ? '#002642' : 'gray'}
+                            textColor={'white'}
+                            onClick={handleNextStep}
+                        />
+
                     </div>
-            )))}
+                </div>
+            )}
             
         </div>
       
