@@ -12,6 +12,7 @@ import ReactFlow, {
 
 import 'reactflow/dist/style.css';
 import Button from '../Button/Button.jsx'
+import CustomInput from '../CustomInput/CustomInput.jsx'
 
 
 const Graph = (
@@ -23,73 +24,96 @@ const Graph = (
 
 ) => {
   const [graph, setGraph] = useGraph;
-  const [nodes, setNodes, onNodesChange] = useNodes;;
+  const [nodes, setNodes, onNodesChange] = useNodes;
   const [edges, setEdges, onEdgesChange] = useEdges;
+  const [inputVisible, setInputVisible] = useState(false);
+  const [inputConfig, setInputConfig] = useState({title: '', placeholder: '', onSubmit: () => {}, validateInput: () => true});
   
+
+  const openInput = ({ title, placeholder, onSubmit, validateInput}) => {
+    setInputConfig({ title: title, placeholder: placeholder, onSubmit: onSubmit, validateInput: validateInput });
+    setInputVisible(true);
+  };
+
+  const closeInput = () => {
+    setInputVisible(false);
+    setInputConfig({ title: '', placeholder: '', onSubmit: () => {}, validateInput: () => true});
+  };
+
   const addNode = () => {
-    const nodeLabel = prompt('Ingrese nombre del nodo:');
-    if (!nodeLabel) return;
+    openInput({
+      title: 'Agregar nodo',
+      placeholder: 'Ej:A',
+      onSubmit: (nodeLabel) => {
+        if (!nodeLabel) return;
 
-    if (graph.find((node) => node.label === nodeLabel)) return;
-    
-    const newNode = new Node(nodeLabel);
-    const updatedGraph = [...graph, newNode];
+        if (graph.find((node) => node.label === nodeLabel)) return;
+        
+        const newNode = new Node(nodeLabel);
+        const updatedGraph = [...graph, newNode];
 
-    const newPlotNode = {
-      id: nodeLabel,
-      position: { x: Math.random() * 500, y: Math.random() * 500 },
-      data: { label: nodeLabel },
-      style: {
-        width: '5rem',
-        height: '5rem',
-        display: 'flex',
-        alignItems: 'center',
-        borderRadius: '10rem',
-        justifyContent: 'center',
-        backgroundColor: 'white',
-        border: '0.3px solid black'
-      },  
-      selectable: true
-    };
+        const newPlotNode = {
+          id: nodeLabel,
+          position: { x: Math.random() * 500, y: Math.random() * 500 },
+          data: { label: nodeLabel },
+          style: {
+            width: '5rem',
+            height: '5rem',
+            display: 'flex',
+            alignItems: 'center',
+            borderRadius: '10rem',
+            justifyContent: 'center',
+            backgroundColor: 'white',
+            border: '0.3px solid black'
+          },  
+          selectable: true
+        };
 
-    const updatedNodes = [...nodes, newPlotNode];
-    setGraph(updatedGraph);
-    setNodes(updatedNodes);
-    saveGraph(updatedGraph);
-    savePlotNodes(updatedNodes);
+        const updatedNodes = [...nodes, newPlotNode];
+        setGraph(updatedGraph);
+        setNodes(updatedNodes);
+        saveGraph(updatedGraph);
+        savePlotNodes(updatedNodes);
+        setInputVisible(false); 
+      }
+    });
   };
 
 
   const addEdge = ({ source, target }) => {
-    const weight = parseInt(prompt('Ingresa peso de arista:'));
-    if (isNaN(weight)) return;
+    openInput({
+      title: 'Inresar peso a la arista',
+      placeholder: 'Ej: 10',
+      onSubmit: (inputValue) => {
+        const weight = parseInt(inputValue);
+        if (isNaN(weight)) return;
 
-    const startNode = graph.find(n => n.label === source);
-    const endNode = graph.find(n => n.label === target);
+        const startNode = graph.find(n => n.label === source);
+        const endNode = graph.find(n => n.label === target);
+        if (!startNode || !endNode || startNode.findNode(endNode)) return;
 
-    // Si ya existe una conexion existente
-    if (!startNode || !endNode || startNode.findNode(endNode)) return;
+        startNode.addEdge(new Edge(endNode, weight));
+        endNode.addEdge(new Edge(startNode, weight));
 
-    startNode.addEdge(new Edge(endNode, weight));
-    endNode.addEdge(new Edge(startNode, weight));
+        const newEdge = {
+          id: `${source}-${target}`,
+          source,
+          target,
+          animated: true,
+          type: 'straight',
+          label: weight.toString()
+        };
 
-    const newEdge = {
-      id: `${source}-${target}`,
-      source:source,
-      target:target,
-      animated: true,
-      type: 'straight',
-      label: weight.toString()
-    };
+        const updatedEdges = [...edges, newEdge];
 
-    const updatedGraph = [...graph];
-    const updatedEdges = [...edges, newEdge];
-
-    setGraph(updatedGraph);
-    setEdges(updatedEdges);
-
-    saveGraph(updatedGraph);
-    savePlotEdges(updatedEdges);
+        setEdges(updatedEdges);
+        setGraph([...graph]); // importante para persistencia
+        saveGraph(graph);
+        savePlotEdges(updatedEdges);
+        setInputVisible(false);
+      },
+      validateInput: (e) => /^[0-9]*$/.test(e.target.value)
+    });
   };
 
   const removeNode = () => {  
@@ -273,6 +297,9 @@ const Graph = (
         <Background />
         <Controls />
       </ReactFlow>
+      
+      {inputVisible && (<CustomInput title={inputConfig.title} placeHolder={inputConfig.placeholder} onSubmit={inputConfig.onSubmit} onCancel={closeInput} validateInput={inputConfig.validateInput}/>)}
+      
 
     </div>
   )

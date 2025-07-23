@@ -5,12 +5,14 @@ import { CRC } from '../../algorithms/crc.js'
 import { setRandomErrorBit } from '../../utils/utils.js'
 import SideBar from '../../components/SideBar/SideBar.jsx'
 
+
 const CyclicRedundancyCheck = () => {
   const crc = new CRC();
   
   const [message, setMessage] = useState('');
   const [generator, setGenerator] = useState('');
-  const [modifyBit, setModifyBit] = useState(false);
+  const [bitPosition, setBitPosition] = useState(1);
+  const [selectedOption, setSelectedOption] = useState('none');
 
   const [frame, setFrame] = useState(null);
   const [residue, setResidue] = useState(null);
@@ -24,7 +26,25 @@ const CyclicRedundancyCheck = () => {
       generator.trim().split('')
     );
     
-    const transmited = modifyBit ? setRandomErrorBit(buildFrame).join('') : buildFrame;
+    // Modificar bit si es necesario el cambio
+    let transmited = null;
+    
+    if (selectedOption === 'random') {
+      transmited = setRandomErrorBit(buildFrame).join('');
+    }
+    else if (selectedOption === 'manual' && bitPosition > 0 && bitPosition <= buildFrame.length) {
+      let buildFrameArray = buildFrame.split('');
+
+      buildFrameArray[bitPosition - 1] === '0' 
+        ? buildFrameArray[bitPosition - 1] = '1' 
+        : buildFrameArray[bitPosition - 1] = '0';
+
+      transmited = buildFrameArray.join('');
+    }
+    else {
+      transmited = buildFrame;
+    }
+    
     const result = crc.getResidue(transmited, generator.trim().split(''));
 
     // Informacion adicional de transmicion de trama
@@ -35,20 +55,22 @@ const CyclicRedundancyCheck = () => {
     setResidue(residueResult);
     setFrameTransmited(transmited);
     setDivisionStepsFrameTransmited(stepsTransmited);
-
-    console.log(stepsTransmited);
-  
   };
 
   const handleClearData = () => {
     setMessage('');
     setGenerator('');
-    setModifyBit(false);    
-
+    setSelectedOption('none');
+    
     setFrame(null);
     setResidue(null);
+    setBitPosition(1);
     setFrameTransmited(null);
     setDivisionStepsFrameTransmited(null);
+  };
+
+  const handleChangeOptionBit = (option) => {
+    setSelectedOption(option);
   };
 
   return (
@@ -83,11 +105,55 @@ const CyclicRedundancyCheck = () => {
 
         <div className='input-container'>
           <h1>Modificar bit</h1>
-          <input 
-            type='checkbox' 
-            value={modifyBit} 
-            onChange={(e) => setModifyBit(e.target.checked)}
-          />
+          <ul>
+            <li key={'radio-button-none'} className='radio-button'>
+              <input
+                type='radio'
+                name='modifyBit'
+                value={'none'}
+                checked={selectedOption === 'none'}
+                onChange={() => handleChangeOptionBit('none')}
+              />
+              <label>Sin modificaciones</label>
+            </li>
+            <li key={'radio-button-random'} className='radio-button'>
+              <input
+                type='radio'
+                name='modifyBit'
+                value={'random'}
+                checked={selectedOption === 'random'}
+                onChange={() => handleChangeOptionBit('random')}
+              />
+              <label>Modificar bit aleatorio</label>
+            </li>
+            <li key={'radio-button-manual'} className='radio-button'>
+              <input
+                type='radio'
+                name='modifyBit'
+                value={'manual'}
+                checked={selectedOption === 'manual'}
+                onChange={() => handleChangeOptionBit('manual')}
+              />
+              <label>Modificar bit manual</label>
+              {selectedOption === 'manual' && (
+                <>
+                  <input
+                    type='number'
+                    min={1}
+                    value={bitPosition}
+                    placeholder='Ingresar indice bit'
+                    onChange={(e) => {
+                      const val = e.target.value; 
+                      if (/^[0-9]*$/.test(val))
+                        setBitPosition(Number(val));
+                      }
+                    }
+                  />
+                </>
+              )}
+            </li>
+          </ul>
+          
         </div>
 
         <div className='buttons-container'>

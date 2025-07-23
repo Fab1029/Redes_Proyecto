@@ -95,3 +95,61 @@ input[type='checkbox'] {
 .quotient-table {
   border-top: 2px solid #002642;
 }
+
+.radio-button {
+  gap: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.radio-button label {
+  font-size: small;
+  font-weight: 500;
+}
+
+.radio-button input[type='radio'] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  border-radius: 50%;
+  position: relative;
+  -webkit-appearance: none;
+  border: 2px solid #002642;
+  transition: 0.2s ease-in-out;
+}
+
+.radio-button input[type='radio']:checked {
+  background-color: #002642;
+}
+
+.radio-button input[type='radio']::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  display: none;
+}
+
+.radio-button input[type='radio']:checked::after {
+  display: block;
+}
+
+input[type='number'] {
+  width: 100%;
+  outline: none;
+  font-size: 1rem;
+  max-width: 10rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 0.5px solid black;
+  transition: all 0.2s ease-in-out;
+}
+
+input[type='number']:focus {
+  border: 1px solid #002642;
+}

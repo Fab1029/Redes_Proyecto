@@ -1,0 +1,65 @@
+.custom-input {
+  display: flex;
+  position: fixed;
+  padding: 1rem 2rem;
+  width: fit-content;
+  height: fit-content;
+  align-items: center;
+  border-radius: 1rem;
+  flex-direction: column;
+  justify-content: center;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  
+  /* Centrado en pantalla */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  transition: all 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+
+.custom-input-label {
+  color: black;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  
+}
+
+.custom-input-field {
+  width: 100%;
+  outline: none;
+  font-size: 1rem;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.2rem;
+  border: 1px solid #ccc;
+  transition: border 0.2s ease-in-out;
+}
+
+.custom-input-field:focus {
+  border-color: gray;
+  box-shadow: 0 0 0 0.5px gray;
+}
+
+.buttons-input-container {
+  gap: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
