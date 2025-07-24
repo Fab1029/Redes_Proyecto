@@ -26,13 +26,12 @@ const Dijkstra = () => {
   const [dijkstraTranslateMatrix, setDijkstraTranslateMatrix] = useState(null);
   
   useEffect(() => {
-    console.log('ENTRO POR QUE CAMBIO GRAPH');
+
     setRoute(null);
     setWeightRoute(null);
     setDijkstraMatrix(null);
     setDijkstraTranslateMatrix(null);
     
-
   }, [graph]);
 
   const handleCalcuteButton = () => {

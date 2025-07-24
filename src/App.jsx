@@ -6,6 +6,7 @@ import CyclicRedundancyCheck from './pages/CyclicRedundancyCheck/CyclicRedundanc
 import Dijkstra from './pages/Dijkstra/Dijkstra';
 import Prim from './pages/Prim/Prim';
 import LinkState from './pages/LinkState/LinkState';
+import DistanceVector from './pages/DistanceVector/DistanceVector';
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path='/dijkstra' element={<Dijkstra />}/>
         <Route path='/crc' element={<CyclicRedundancyCheck />}/>
         <Route path='/link-state' element= {<LinkState />} />
+        <Route path='/distance-vector' element={<DistanceVector />} />
       </Routes>
     </Router>
   )

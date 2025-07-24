@@ -1,69 +1,68 @@
-class DistanceVector {
-
+export class DistanceVector {
     /*
         @param:
             graph list: Lista de nodos del grafo
-            indexNode int: Posición del nodo en el grafo
         @return:
-            neighbors list: Matriz de vecinos del nodo especificado
+            iterations dict: Diccionario de iteraciones de vector distancia
     */
-    buildNeighborsTableForNode(graph, indexNode) { 
-        const node = graph[indexNode];
-        let neighbors = Array.from({length: graph.length}, () => Array.from({length: node.edges.length}, () => null));
+    initIterationsDistanceVector(graph) {
+        let iterations = {};
+        // Inicializar desde una iteracion de reconocmiento
+        // de vector distancia de nodos
+        iterations[0] = {};
+        for (let j = 0; j < graph.length; j++) {
+            const currentNode = graph[j];
+            const currentLabel = currentNode.label;
+            
+            iterations[0][currentLabel] = Array.from({ length: graph.length }, () => [Infinity, null]);
         
-        for (let i = 0; i < graph.length; i++) {
-            for (let j = 0; j < node.edges.length; j++) {
-                if (graph[i] === node.edges[j].node) {
-                    neighbors[i][j] = 0;
-                }
-                else if (graph[i].findNode(node.edges[j].node) !== undefined) {
-                    neighbors[i][j] = graph[i].findNode(node.edges[j].node).weight;
-                }
+            for (let i = 0; i < graph.length; i++) {
+                const nodeIteration = graph[i];
+                const labelNodeIteration = nodeIteration.label;
 
+                if (currentNode === nodeIteration) {
+                    iterations[0][currentLabel][i][0] = 0;
+                    iterations[0][currentLabel][i][1] = currentLabel;
+                }
+                else if (currentNode.findNode(nodeIteration) !== undefined) { 
+                    iterations[0][currentLabel][i][1] = labelNodeIteration;
+                    iterations[0][currentLabel][i][0] = currentNode.findNode(nodeIteration).weight;
+                }
             }
         }
 
-        return neighbors;
+        return iterations;
     }
 
     /*
         @param:
             graph list: Lista de nodos del grafo
-            matrixNeighbors list: Matriz de vecinos del nodo especificado
-            indexNode int: Posición del nodo en el grafo
+            iterations dict: Diccionario de iteraciones de vector distancia
+            iteration int: Iteración actual de vector distancia
         @return:
-            routingTable list: Tabla de enrutamiento del nodo especificado
+            iterations dict: Diccionario de iteraciones de vector distancia
     */
-    buildRoutingTableForNode(graph, matrixNeighbors, indexNode) {
-        const node = graph[indexNode];
-        let routingTable = Array.from({length: graph.length}, () => Array.from({length: 2}, () => null));
-        
-        for (let i = 0; i < graph.length; i++) {
-            if (graph[i] === node) {
-                routingTable[i][0] = 0;
-                routingTable[i][1] = node.label;
-            }
-            else {
-                let minNode = null;
-                let minWeight = Infinity;
+    getNextIterationDistanceVector(graph, iterations, iteration) {
+        iterations[iteration] = {};
 
-                for (let j= 0; j < node.edges.length; j++) {
-                    if (matrixNeighbors[i][j] !== null && matrixNeighbors[i][j] < minWeight) {
-                        minNode = node.edges[j].node;
-                        minWeight = matrixNeighbors[i][j];
+        for (const node of graph) {
+            // Copiar la iteración anterior
+            iterations[iteration][node.label] = iterations[iteration - 1][node.label].map(arr => [...arr]);
+
+            for(let i = 0; i < graph.length; i++) {
+
+                for(const edge of node.edges) {
+                    const neighborTable = iterations[iteration - 1][edge.node.label];
+
+                    if(neighborTable[i][0] < iterations[iteration][node.label][i][0]) {
+                        iterations[iteration][node.label][i][1] = edge.node.label;
+                        iterations[iteration][node.label][i][0] = neighborTable[i][0] + edge.weight;
                     }
                 }
-
-                if (minNode !== null) {
-                    routingTable[i][1] = minNode.label;
-                    routingTable[i][0] = minWeight + node.findNode(minNode).weight;
-                }
-
             }
-            
         }
 
-        return routingTable;
+        return iterations;
     }
 
 }
