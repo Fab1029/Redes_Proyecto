@@ -85,12 +85,7 @@ const LinkState = () => {
     <div className='link-state-page'>
         <SideBar />
         <div className='link-state-left-container'>
-            <ul className='options-link-state-list'>
-                <li><Button text={'🗑️ Eliminar tabla'} color={'#E98A15'} textColor={'white'} onClick={handleDeleteTable}/></li>
-                <li><Button text={'🗑️ Eliminar tablas'} color={'#DD1C1A'} textColor={'white'} onClick={handleDeleteTables}/></li>
-                <li><Button text={'🟢 Obtener topología'} color={'#002642'} textColor={'white'} onClick={handleGetNetwork}/></li>
-            </ul>
-
+            
             <div className='add-table-container'>
                 <h2>Gestionar tabla</h2>
                 <div className='form-container'>
@@ -98,7 +93,7 @@ const LinkState = () => {
                         <h4>Router incial</h4>
                         <input 
                             className='input'
-                            placeholder='Agregar nombre de router'
+                            placeholder='Agregar etiqueta router'
                             value={startRouter}
                             onChange={(e) => {setStartRouter(e.target.value)}}
                         />
@@ -121,14 +116,14 @@ const LinkState = () => {
           
                     </div>
                     <div className='form-body-container'>
-                        <h3>Enlaces</h3>
+                        <h2>Enlaces</h2>
                         <ul className='links-list'>
                             {links.map((link, index) => (
                                 <li key={index} className='link-item'>
                                     <h4>Router destino</h4>
                                     <input 
                                         className='input' 
-                                        placeholder='Agregar nombre del router' 
+                                        placeholder='Agregar etiqueta' 
                                         value={link.to}
                                         onChange={(e) => {
                                             const newLinks = [...links];
@@ -139,7 +134,7 @@ const LinkState = () => {
                                     <h4>Peso</h4>
                                     <input 
                                         className='input' 
-                                        placeholder='Ingresar peso del enlace' 
+                                        placeholder='Ingresar peso' 
                                         value={link.weight}
                                         onChange={(e) => {
                                             const value = e.target.value;
@@ -199,6 +194,15 @@ const LinkState = () => {
                     ))}
                         
                 </div>
+                
+                {graph.length > 0 && (
+                    <ul className='options-link-state-list'>
+                        <li><Button text={'🗑️ Eliminar tabla'} color={'#E98A15'} textColor={'white'} onClick={handleDeleteTable}/></li>
+                        <li><Button text={'🗑️ Eliminar tablas'} color={'#DD1C1A'} textColor={'white'} onClick={handleDeleteTables}/></li>
+                        <li><Button text={'🟢 Obtener topología'} color={'#002642'} textColor={'white'} onClick={handleGetNetwork}/></li>
+                    </ul>
+                )}
+
             </div>
 
         </div>
