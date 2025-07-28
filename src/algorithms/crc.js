@@ -9,71 +9,69 @@ export class CRC {
         @return:
             frame_bits dict: lista de residuo ademas de los pasos de la division
     */
-    getResidue(frame, polynomial) {
-        let frame_bits = [];
-        let division_steps = [];
-        let flag_star_steps = false;
+   getResidue(frame, polynomial) {
+    let frame_bits = [];
+    let division_steps = [];
+    let flag_start_steps = false;
+    let i = 0;
 
-        for (let i = 0; i < frame.length; i++) {
-            
-            frame_bits.push(frame[i]); 
-            
-            if(frame_bits.length === polynomial.length) {
-                
-                let residue = [];
-                for(let j = 0; j < polynomial.length; j++) {
-                    residue.push(XOR(frame_bits[j], polynomial[j]));
-                }
-                
-                // Guardar resultados intermedios
-                division_steps.push({
-                    dividendo: [...frame_bits],
-                    divisor: [...polynomial],
-                    cociente: '1',
-                    residuo: [...residue]
-                });
-         
-                // Elimnar ceros a la izquierda
-                while(residue.length > 0 && residue[0] === '0') {
-                    residue.shift();
-                };
-
-                frame_bits = residue;
-
-                // Por primera vez se ha realizado una division
-                flag_star_steps = true;
-            }
-
-            else if(flag_star_steps && frame_bits.length < polynomial.length) {
-                // Guardar resultados intermedios
-                division_steps.push({
-                    dividendo: [...Array.from({length: polynomial.length - frame_bits.length}, () => '0'), ...frame_bits],
-                    divisor: Array.from({length: polynomial.length}, () => '0'),
-                    cociente: '0',
-                    residuo: [...Array.from({length: polynomial.length - frame_bits.length}, () => '0'), ...frame_bits]
-                });
-            }
-
-            // Si aún no hemos empezado la división, eliminamos ceros iniciales
-            if (!flag_star_steps) {
-                while (frame_bits.length > 0 && frame_bits[0] === '0') {
-                    frame_bits.shift();
-                }
-            }
-
-        }
-
-        //Limpiar ceros a la izquierda
-        while(frame_bits.length > 0 && frame_bits[0] === '0') {
+    while (i < frame.length) {
+        // Añadir el siguiente bit al frame_bits
+        frame_bits.push(frame[i]);
+        
+        // Eliminar ceros iniciales
+        while (frame_bits.length > 0 && frame_bits[0] === '0') {
             frame_bits.shift();
         }
-        // Si no hay residuo, retornar 0
+
+        // Solo ejecutar XOR cuando tengamos suficientes bits
+        if (frame_bits.length === polynomial.length) {
+            let residue = [];
+
+            for (let j = 0; j < polynomial.length; j++) {
+                residue.push(XOR(frame_bits[j], polynomial[j]));
+            }
+
+            division_steps.push({
+                dividendo: [...frame_bits],
+                divisor: [...polynomial],
+                cociente: '1',
+                residuo: [...residue]
+            });
+
+            frame_bits = [...residue];
+
+            // Eliminar ceros a la izquierda del nuevo residuo
+            while (frame_bits.length > 0 && frame_bits[0] === '0') {
+                frame_bits.shift();
+            }
+
+            flag_start_steps = true;
+        } else if (flag_start_steps && frame_bits.length < polynomial.length) {
+            // Se necesita agregar ceros para igualar tamaño y simular división
+            const zerosNeeded = polynomial.length - frame_bits.length;
+            const padded_bits = [...Array(zerosNeeded).fill('0'), ...frame_bits];
+
+            division_steps.push({
+                dividendo: [...padded_bits],
+                divisor: Array.from({length: polynomial.length}, () => '0'),
+                cociente: '0',
+                residuo: [...padded_bits]
+            });
+        }
+
+        i++;
+    }
+
+        // Si no hay residuo, retornar "0"
         if (frame_bits.length === 0) {
             frame_bits.push('0');
         }
 
-        return {residue: frame_bits, division_steps: division_steps};
-
+        return {
+            residue: frame_bits,
+            division_steps: division_steps
+        };
     }
     
     /*
