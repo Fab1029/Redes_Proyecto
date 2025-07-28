@@ -7,7 +7,7 @@ export class DistanceVector {
     */
     initIterationsDistanceVector(graph) {
         let iterations = {};
-        // Inicializar desde una iteracion de reconocmiento
+        // Inicializar desde una iteracion de reconocimiento
         // de vector distancia de nodos
         iterations[0] = {};
         for (let j = 0; j < graph.length; j++) {

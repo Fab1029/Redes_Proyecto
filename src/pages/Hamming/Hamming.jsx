@@ -32,8 +32,8 @@ const Hamming = () => {
         let buildFrameArray = [...messageInput];
 
         buildFrameArray[bitPosition - 1] === '0' 
-        ? buildFrameArray[bitPosition - 1] = '1' 
-        : buildFrameArray[bitPosition - 1] = '0';
+            ? buildFrameArray[bitPosition - 1] = '1' 
+            : buildFrameArray[bitPosition - 1] = '0';
 
         sent = buildFrameArray.join('');
     }
@@ -150,7 +150,7 @@ const Hamming = () => {
                             <>
                             <input
                                 type='number'
-                                min={1}
+                                min={'1'}
                                 value={bitPosition}
                                 placeholder='Ingresar indice bit'
                                 onChange={(e) => {

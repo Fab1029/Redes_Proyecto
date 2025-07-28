@@ -20,7 +20,7 @@ const LinkState = () => {
   const linkStateAlgorithm = new LinkStateAlgorithm();
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [selectedTableIndex, setSelectedTableIndex] = useState(null);
+  const [selectedTableIndex, setSelectedTableIndex] = useState(0);
 
   const handleAddTable = () => {
     if (!startRouter.trim()) return;
@@ -69,9 +69,9 @@ const LinkState = () => {
     const updatedGraph = graph
         .filter((node) => node !== selectedNode)
         .map((node) => {
-        const newNode = new Node(node.label);
-        newNode.edges = node.edges.filter(edge => edge.node !== selectedNode);
-        return newNode;
+            const newNode = new Node(node.label);
+            newNode.edges = node.edges.filter(edge => edge.node !== selectedNode);
+            return newNode;
         });
 
     setGraph(updatedGraph);

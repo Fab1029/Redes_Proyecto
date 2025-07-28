@@ -63,6 +63,15 @@ export class CRC {
 
         }
 
+        //Limpiar ceros a la izquierda
+        while(frame_bits.length > 0 && frame_bits[0] === '0') {
+            frame_bits.shift();
+        }
+        // Si no hay residuo, retornar 0
+        if (frame_bits.length === 0) {
+            frame_bits.push('0');
+        }
+
         return {residue: frame_bits, division_steps: division_steps};
 
     }
